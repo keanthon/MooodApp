@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:moood/screens/login_screen.dart';
-import 'package:moood/utils/colors.dart';
+import 'package:moood/utils/colors_styles.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
