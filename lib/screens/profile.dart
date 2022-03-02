@@ -1,0 +1,89 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../utils/colors_styles.dart';
+import '../utils/helper_functions.dart';
+
+class Profile extends StatelessWidget {
+  appUser user;
+  Profile({Key? key, required this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+                "Your profile",
+                style: TextStyle(
+                    color: primaryColor
+                )
+            ),
+          ],
+        ),
+      ),
+        body: Center (
+            child: Column (
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  // FIXME need custom profile pic
+                  CircleAvatar(
+                    radius: 100,
+                    backgroundImage: AssetImage('assets/images/logo.jpg'),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  Text(
+                      "Hi " + user.firstName + " " + user.lastName + "!",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: secondaryColor,
+                      )
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  Container(
+                      height: 150,
+                      width: 450,
+                      decoration: BoxDecoration(
+                          color: secondaryColor,
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      child: Column (
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                            ),
+                            Text(
+                                "Your status",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: primaryColor,
+                                )
+                            ),
+                            Text(
+                                user.userStatus,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: primaryColor,
+                                )
+                            ),
+                          ]
+                      )
+                  )
+                ]
+            )
+        )
+    );
+  }
+}

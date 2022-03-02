@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moood/screens/stream_interface.dart';
 import 'package:moood/widgets/input_decoration.dart';
+import '../utils/helper_functions.dart';
 import 'signup_screen.dart';
 
 // Form widget
@@ -81,9 +85,42 @@ class MyCustomFormState extends State<MyCustomForm> {
                 primary: Colors.deepPurpleAccent[100],
                 fixedSize: Size(300, 50),
               ),
-              onPressed: (){
-                if (_formKey.currentState!.validate())
-                  print("bitch");
+              onPressed: () async {
+                // FIXME cache login status so don't have to re-login
+                if (_formKey.currentState!.validate()) {
+                  FirebaseAuth _auth;
+                  try {
+                    _auth = FirebaseAuth.instance;
+                    await _auth.signInWithEmailAndPassword(
+                        email: _emailCont.text, password: _passwordCont.text);
+                  }
+                  on FirebaseAuthException catch(e) {
+                      Widget okButton = TextButton(
+                        child: Text("OK"),
+                        onPressed: () => Navigator.pop(context)
+                      );
+
+                      // set up the AlertDialog
+                      AlertDialog alert = AlertDialog(
+                        title: Text("Error"),
+                        content: Text(e.toString().split("]")[1].substring(1)), // FIXME make this formatting better
+                        actions: [
+                          okButton,
+                        ],
+                      );
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+
+                    return;
+                  }
+
+                  go_to_stream(context);
+                }
               },
               child: const Text('Submit')
           ),
