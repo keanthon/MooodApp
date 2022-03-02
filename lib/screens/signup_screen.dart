@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/resources/auth_methods.dart';
+import 'package:moood/screens/stream_interface.dart';
 import 'package:moood/widgets/input_decoration.dart';
+
+import '../utils/helper_functions.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -136,13 +139,14 @@ class _SignupScreenState extends State<SignupScreen> {
                             password: _passwordCont.text, firstName: _firstName.text,
                             lastName: _lastName.text, username: _userName.text);
                           print(res);
+
+                          go_to_stream(context);
 ;                        }
 
                       },
                       child: const Text('Create Account')
                   ),
 
-                  //
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

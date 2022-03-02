@@ -27,6 +27,8 @@ class AuthMethods {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
+        await _auth.currentUser?.updateDisplayName(firstName + " " + lastName);
+
         print(cred.user!.uid);
         // add user info to database
         _firestore.collection('users').doc(cred.user!.uid).set({
