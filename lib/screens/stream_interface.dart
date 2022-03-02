@@ -22,6 +22,8 @@ class StreamInterface extends StatefulWidget {
 class StreamInterfaceState extends State<StreamInterface> {
   final User user;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController statusController = TextEditingController();
+  final maxStatusCount = 20;
 
   StreamInterfaceState({Key? key, required this.user}) {
     List<String>? split = user.displayName?.split(" ");
@@ -51,9 +53,6 @@ class StreamInterfaceState extends State<StreamInterface> {
     }
 
     getUserStatus();
-
-    final TextEditingController statusController = TextEditingController();
-    final maxStatusCount = 20;
 
     return Scaffold(
       appBar: AppBar(
@@ -137,11 +136,15 @@ class StreamInterfaceState extends State<StreamInterface> {
                       Colors.redAccent[100]).decorate(),
                 ),
               ),
+              // FIXME bug with text form not working when going back on stream and retrying
               Material(
                 child: InkWell(
                   onTap: () {
                     _firestore.collection("users").doc(user.uid).update({"status": statusController.text});
-                    userStatus = statusController.text;
+                    setState(() {
+                      userStatus = statusController.text;
+                      statusController.text = "";
+                    });
                   },
                   splashColor: secondaryColor,
                   child: Container(
