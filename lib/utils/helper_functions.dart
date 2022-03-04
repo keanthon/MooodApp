@@ -8,9 +8,9 @@ import 'colors_styles.dart';
 class appUser {
   final String firstName;
   final String lastName;
-  final String userStatus;
+  List<String> userStatuses;
 
-  appUser(this.firstName, this.lastName, this.userStatus);
+  appUser(this.firstName, this.lastName, this.userStatuses);
 }
 
 void go_to_stream (BuildContext context) {
@@ -31,4 +31,24 @@ Container redCenteredContainer(String text) {
           )
       )
   );
+}
+
+Widget generate_posts(List<String> input) {
+  return Column(children: input.reversed.map((value) {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          color: tertiaryColor,
+        ),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(20),
+        child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              color: primaryColor,
+            )
+        )
+    );
+  }).toList());
 }

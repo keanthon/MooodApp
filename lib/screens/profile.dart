@@ -72,7 +72,7 @@ class Profile extends StatelessWidget {
                                 )
                             ),
                             Text(
-                                user.userStatus,
+                                user.userStatuses.last,
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: primaryColor,
