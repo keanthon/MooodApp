@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/screens/stream_interface.dart';
-import 'package:moood/widgets/input_decoration.dart';
+import 'package:moood/utils/input_decoration.dart';
 import '../utils/helper_functions.dart';
 import 'signup_screen.dart';
 
