@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/screens/stream_interface.dart';
-import 'package:moood/widgets/input_decoration.dart';
+import 'package:moood/utils/input_decoration.dart';
 
 import '../utils/helper_functions.dart';
 
@@ -21,6 +21,38 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordCont = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
+  void signUpUser(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      String res = await AuthMethods().signUpUser(
+          email: _emailCont.text,
+          password: _passwordCont.text,
+          firstName: _firstName.text,
+          lastName: _lastName.text,
+          username: _userName.text
+      );
+
+      print(res);
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if(res=='success') {
+        goToFeed(context);
+      }
+      else {
+        showSnackBar(res, context);
+      }
+
+    }
+
+  }
 
   @override
   void dispose() {
@@ -134,17 +166,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         fixedSize: Size(300, 50),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          String res = await AuthMethods().signUpUser(email: _emailCont.text,
-                            password: _passwordCont.text, firstName: _firstName.text,
-                            lastName: _lastName.text, username: _userName.text);
-                          print(res);
-
-                          go_to_stream(context);
-;                        }
+                        signUpUser(context);
 
                       },
-                      child: const Text('Create Account')
+                      child: _isLoading? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Text('Create Account')
                   ),
 
                   Row(

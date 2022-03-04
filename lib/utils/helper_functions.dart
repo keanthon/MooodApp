@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../responsive/responsive_layout.dart';
 import '../screens/stream_interface.dart';
 import 'colors_styles.dart';
 
@@ -16,6 +17,14 @@ class appUser {
 void go_to_stream (BuildContext context) {
   Route route = MaterialPageRoute(builder: (context) => StreamInterface());
   Navigator.pushAndRemoveUntil(context, route, (route) => false);
+}
+
+void goToFeed(BuildContext context) {
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (context) => const ResponsiveLayout(),
+    ),
+  );
 }
 
 Container redCenteredContainer(String text) {
@@ -51,4 +60,12 @@ Widget generate_posts(List<String> input) {
         )
     );
   }).toList());
+}
+
+showSnackBar(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(content),
+    ),
+  );
 }
