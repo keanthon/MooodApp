@@ -3,10 +3,19 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:moood/models/user_class.dart';
 
+// Firebase Authentication Methods
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<UserClass> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
+
+    return UserClass.fromSnap(snap);
+  }
 
   // sign up user
   Future<String> signUpUser({
@@ -17,7 +26,7 @@ class AuthMethods {
     required String username,
 
   }) async {
-    String res = "Some error occurred";
+    String res = "Error occurred";
 
     try{
       if(email.isNotEmpty || password.isNotEmpty || firstName.isNotEmpty ||
@@ -31,18 +40,20 @@ class AuthMethods {
 
         print(cred.user!.uid);
         // add user info to database
-        _firestore.collection('users').doc(cred.user!.uid).set({
-          'username': username,
-          'firstName': firstName,
-          'lastName': lastName,
-          'uid': cred.user!.uid,
-          'email': email,
-          'bio': '',
-          'followers': [],
-          'following': [],
-        });
 
-        //
+        UserClass usr = UserClass(
+            uid: cred.user!.uid,
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            bio: '',
+            followers: [],
+            following: [],
+        );
+
+        _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
+
 
         res = "success";
       }
@@ -50,6 +61,24 @@ class AuthMethods {
       res = err.toString();
     }
 
+    return res;
+  }
+
+  // Login user
+  Future<String> loginUser({
+      required String email,
+      required String password
+    }) async {
+    String res = "Some error occurred";
+
+    try {
+      if(email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
+        res = "success";
+      }
+    } catch(err) {
+      res = err.toString();
+    }
     return res;
   }
 }

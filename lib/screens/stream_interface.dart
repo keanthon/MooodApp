@@ -8,7 +8,7 @@ import 'package:moood/screens/profile.dart';
 
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
-import '../widgets/input_decoration.dart';
+import '../utils/input_decoration.dart';
 
 
 class StreamInterface extends StatefulWidget {
