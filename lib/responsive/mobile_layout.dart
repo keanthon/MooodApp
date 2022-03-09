@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,22 @@ class _MobileLayoutState extends State<MobileLayout> {
       body: Center(
         child: Text(user.username),
       ),
+      bottomNavigationBar:  CurvedNavigationBar(
+        backgroundColor: Colors.deepPurpleAccent,
+        buttonBackgroundColor: Colors.red,
 
+        color: Colors.deepPurple,
+        items: <Widget>[
+          Icon(Icons.home, size: 30),
+          Icon(Icons.search, size: 30),
+          Icon(Icons.add, size: 30),
+          Icon(Icons.feed, size: 30),
+          Icon(Icons.phone, size: 30),
+        ],
+        onTap: (index) {
+          //Handle button tap
+        },
+      ),
     );
   }
 }
