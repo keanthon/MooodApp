@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-class Post extends StatefulWidget {
-  const Post({Key? key}) : super(key: key);
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  @override
-  _PostState createState() => _PostState();
-}
+class postData {
+  final String status;
+  final String emoji;
+  // FIXME Add audio and location
+  // final String audioClipDir;
+  // Location
 
-class _PostState extends State<Post> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+  const postData({
+    required this.status,
+    required this.emoji,
+  });
 }

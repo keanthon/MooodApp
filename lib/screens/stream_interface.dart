@@ -5,30 +5,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moood/screens/profile.dart';
+import 'package:provider/provider.dart';
 
+import '../models/user_class.dart';
+import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 import '../utils/input_decoration.dart';
 
 
 class StreamInterface extends StatefulWidget {
-  final User user = FirebaseAuth.instance.currentUser!;
   StreamInterface({Key? key}) : super(key: key);
 
   @override
   StreamInterfaceState createState() {
-    return StreamInterfaceState(user: this.user,);
+    return StreamInterfaceState();
   }
 }
 
 class StreamInterfaceState extends State<StreamInterface> {
-  final User user;
+  final User user = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController statusController = TextEditingController();
   final maxStatusCount = 20;
   List<String> userStatuses = [];
 
-  StreamInterfaceState({Key? key, required this.user}) {
+  StreamInterfaceState({Key? key}) {
     List<String>? split = user.displayName?.split(" ");
     firstName = split![0];
     lastName = split[1];
@@ -49,6 +51,7 @@ class StreamInterfaceState extends State<StreamInterface> {
 
   @override
   Widget build(BuildContext context) {
+    UserClass usr = Provider.of<UserProvider>(context).getUser;
     requireFunc(value) {
       if (value == null || value.isEmpty) {
         return 'Required';
@@ -80,7 +83,7 @@ class StreamInterfaceState extends State<StreamInterface> {
             child: IconButton(
               icon: const Icon(Icons.account_circle, color: primaryColor, size: 30),
               onPressed: () {
-                Route route = MaterialPageRoute(builder: (context) => Profile(user: appUser(firstName, lastName, userStatuses)));
+                Route route = MaterialPageRoute(builder: (context) => Profile(user: usr));
                 Navigator.push(context, route);
               },
             )

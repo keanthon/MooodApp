@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:moood/models/user_class.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 
 class Profile extends StatelessWidget {
-  appUser user;
+  UserClass user;
   Profile({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -72,7 +72,8 @@ class Profile extends StatelessWidget {
                                 )
                             ),
                             Text(
-                                user.userStatuses.last,
+                                //FIXME change to latest post
+                                "Hello",
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: primaryColor,
