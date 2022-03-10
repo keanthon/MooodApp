@@ -44,7 +44,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
 
     if(res == "success") {
-      goToFeed(context);
+      goToPage(const ResponsiveLayout(), 1, context);
     }
     else {
       showSnackBar(res, context);
@@ -64,12 +64,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    requireFunc(value) {
-      if (value == null || value.isEmpty) {
-        return 'Required';
-      }
-      return null;
-    }
 
     return Form(
       key: _formKey,

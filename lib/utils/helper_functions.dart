@@ -14,23 +14,24 @@ class appUser {
   appUser(this.firstName, this.lastName, this.userStatuses);
 }
 
-void go_to_stream (BuildContext context) {
-  Route route = MaterialPageRoute(builder: (context) => StreamInterface());
-  Navigator.pushAndRemoveUntil(context, route, (route) => false);
+
+// 1 for push replace, 2 for push, 3 for pushandremoveuntil
+void goToPage(Widget page, int pushReplace, BuildContext context ) {
+  Route route = MaterialPageRoute(builder: (context) => page);
+  if(pushReplace==1) {
+    Navigator.pushReplacement(context, route);
+  } else if (pushReplace==2) {
+    Navigator.push(context, route);
+  } else {
+    Navigator.pushAndRemoveUntil(context, route, (route) => false);
+  }
+
 }
 
-void goToFeed(BuildContext context) {
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute(
-      builder: (context) => const ResponsiveLayout(),
-    ),
-  );
-}
-
-Container redCenteredContainer(String text) {
+Container redCenteredContainer(String text, bool selected) {
   return Container(
       decoration: BoxDecoration(
-          color: secondaryColor,
+          color: selected ? Colors.white: secondaryColor,
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       padding: EdgeInsets.all(10),
       child: Center (
@@ -68,4 +69,11 @@ showSnackBar(String content, BuildContext context) {
       content: Text(content),
     ),
   );
+}
+
+String? requireFunc(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Required';
+  }
+  return null;
 }

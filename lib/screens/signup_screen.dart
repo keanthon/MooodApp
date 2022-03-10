@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/resources/auth_methods.dart';
+import 'package:moood/responsive/responsive_layout.dart';
 import 'package:moood/screens/stream_interface.dart';
 import 'package:moood/utils/input_decoration.dart';
 
@@ -44,7 +45,7 @@ class _SignupScreenState extends State<SignupScreen> {
       });
 
       if(res=='success') {
-        goToFeed(context);
+        goToPage(ResponsiveLayout(), 1, context);
       }
       else {
         showSnackBar(res, context);
@@ -67,12 +68,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    requireFunc(value) {
-      if (value == null || value.isEmpty) {
-        return 'Required';
-      }
-      return null;
-    }
 
     notMatchFunc(val){
       if(val==null || val.isEmpty)

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:moood/models/post.dart';
 import 'package:moood/models/user_class.dart';
 
 // Firebase Authentication Methods
@@ -76,6 +77,24 @@ class AuthMethods {
         await _auth.signInWithEmailAndPassword(email: email, password: password);
         res = "success";
       }
+    } catch(err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  // Send post
+  Future<String> sendPost({
+    required String uid,
+    required String status,
+    required String emoji,
+  }) async {
+    postData pos = postData(uid: uid, status: status, emoji: emoji);
+    String res = "Error";
+
+    try {
+      await _firestore.collection("posts").add(pos.toJson());
+      res = "success";
     } catch(err) {
       res = err.toString();
     }
