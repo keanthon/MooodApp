@@ -39,7 +39,6 @@ class AuthMethods {
 
         await _auth.currentUser?.updateDisplayName(firstName + " " + lastName);
 
-        print(cred.user!.uid);
         // add user info to database
 
         UserClass usr = UserClass(
@@ -89,7 +88,7 @@ class AuthMethods {
     required String status,
     required String emoji,
   }) async {
-    postData pos = postData(uid: uid, status: status, emoji: emoji);
+    postData pos = postData(uid: uid, status: status, emoji: emoji, date: DateTime.now());
     String res = "Error";
 
     try {
