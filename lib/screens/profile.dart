@@ -5,7 +5,7 @@ import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 
 class Profile extends StatelessWidget {
-  UserClass user;
+  UserClass? user;
   Profile({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class Profile extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 20),
                   ),
                   Text(
-                      "Hi " + user.firstName + " " + user.lastName + "!",
+                      "Hi " + user!.firstName + " " + user!.lastName + "!",
                       style: TextStyle(
                         fontSize: 24,
                         color: secondaryColor,

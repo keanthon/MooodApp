@@ -37,7 +37,7 @@ class StreamInterfaceState extends State<StreamInterface> {
 
   @override
   Widget build(BuildContext context) {
-    UserClass usr = Provider.of<UserProvider>(context).getUser;
+    UserClass? usr = Provider.of<UserProvider>(context).getUser;
 
 
 
