@@ -7,8 +7,8 @@ class UserClass {
   final String lastName;
   final String email;
   final String bio;
-  final List followers;
-  final List following;
+  final List friends;
+  final List posts;
 
   const UserClass({
     required this.uid,
@@ -17,8 +17,8 @@ class UserClass {
     required this.lastName,
     required this.email,
     required this.bio,
-    required this.followers,
-    required this.following,
+    required this.friends,
+    required this.posts,
   });
 
   Map<String, dynamic> toJson() => {
@@ -28,8 +28,8 @@ class UserClass {
     'uid': uid,
     'email': email,
     'bio': bio,
-    'followers': followers,
-    'following': following,
+    'friends': friends,
+    'posts': posts,
   };
 
   // function to decode the json from snapshot
@@ -42,8 +42,8 @@ class UserClass {
         lastName: snapshot['lastName'],
         email: snapshot['email'],
         bio: snapshot['bio'],
-        followers: snapshot['followers'],
-        following: snapshot['following'],
+        friends: snapshot['friends'],
+        posts: snapshot['posts'],
     );
   }
 }
