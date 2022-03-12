@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/utils/globals.dart';
+import 'package:moood/screens/login_screen.dart';
+import '../resources/auth_methods.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 
 class Profile extends StatelessWidget {
-  UserClass user;
+  UserClass? user;
   Profile({Key? key, required this.user}): super(key: key) {
     friendRequests = castIntoListMap(user.friends);
   }
@@ -88,6 +90,13 @@ class Profile extends StatelessWidget {
                     )
                   ),
                   displayFriends(friendRequests),
+                  ElevatedButton(
+                    child: Text("Sign Out"),
+                    onPressed: () async {
+                      AuthMethods().signOut();
+                      goToPage(LoginScreen(), 1, context);
+                    },
+                  ),
                 ]
             ),
           ),

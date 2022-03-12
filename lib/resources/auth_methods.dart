@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:moood/models/post.dart';
 import 'package:moood/models/user_class.dart';
-
-import '../utils/globals.dart';
 import '../utils/helper_functions.dart';
 
 // Firebase Authentication Methods
@@ -42,7 +40,6 @@ class AuthMethods {
 
         await _auth.currentUser?.updateDisplayName(firstName + " " + lastName);
 
-        //print(cred.user!.uid);
         // add user info to database
 
         UserClass usr = UserClass(
@@ -54,10 +51,10 @@ class AuthMethods {
             email: email,
             bio: '',
             friends: [],
+            posts: [],
         );
 
-        await _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
-
+        _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
 
         res = "success";
       }
@@ -91,16 +88,30 @@ class AuthMethods {
     required String uid,
     required String status,
     required String emoji,
+    required List friends,
   }) async {
-    postData pos = postData(uid: uid, status: status, emoji: emoji);
+    var pos = postData(uid: uid, status: status, emoji: emoji, date: DateTime.now()).toJson();
     String res = "Error";
 
     try {
-      await _firestore.collection("posts").add(pos.toJson());
+      // put in my posts
+      await _firestore.collection("users").doc(uid).update({
+        'posts': FieldValue.arrayUnion([pos])
+      });
+
+      // put in my
+      // put in my friends feed
+      for(var friend in friends) {
+        await _firestore.collection("userfeeds").doc(friend).collection("feed").add(pos);
+      }
       res = "success";
     } catch(err) {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<void> signOut() async {
+    _auth.signOut();
   }
 }
