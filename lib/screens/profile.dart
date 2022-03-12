@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
+import 'package:moood/utils/globals.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 
 class Profile extends StatelessWidget {
   UserClass user;
-  Profile({Key? key, required this.user}) : super(key: key);
+  Profile({Key? key, required this.user}): super(key: key) {
+    friendRequests = castIntoListMap(user.friends);
+  }
+
+  List<Map<String, String>> friendRequests = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,63 +32,65 @@ class Profile extends StatelessWidget {
           ],
         ),
       ),
-        body: Center (
+        body: SingleChildScrollView(
+          child: Center(
             child: Column (
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                  ),
                   // FIXME need custom profile pic
                   CircleAvatar(
                     radius: 100,
                     backgroundImage: AssetImage('assets/images/logo.jpg'),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                  ),
                   Text(
-                      "Hi " + user.firstName + " " + user.lastName + "!",
+                      "Hi ${user.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
                       style: TextStyle(
                         fontSize: 24,
                         color: secondaryColor,
                       )
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                  ),
                   Container(
-                      height: 150,
-                      width: 450,
-                      decoration: BoxDecoration(
-                          color: secondaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                      child: Column (
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 5),
-                            ),
-                            Text(
-                                "Your status",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: primaryColor,
-                                )
-                            ),
-                            Text(
-                                //FIXME change to latest post
-                                "Hello",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: primaryColor,
-                                )
-                            ),
-                          ]
+                    height: 150,
+                    width: 450,
+                    decoration: const BoxDecoration(
+                        color: secondaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: Column (
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                          ),
+                          Text(
+                              "Your status",
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: primaryColor,
+                              )
+                          ),
+                          Text(
+                              //FIXME change to latest post
+                              "Hello",
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: primaryColor,
+                              )
+                          ),
+                        ]
                       )
-                  )
+                    ),
+                  Text(
+                    "Your friends",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: secondaryColor,
+                    )
+                  ),
+                  displayFriends(friendRequests),
                 ]
-            )
+            ),
+          ),
         )
     );
   }
