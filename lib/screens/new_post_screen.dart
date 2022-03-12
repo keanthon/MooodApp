@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/screens/profile.dart';
+import 'package:provider/provider.dart';
 
+import '../models/user_class.dart';
+import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 import '../utils/input_decoration.dart';
@@ -17,8 +20,6 @@ class NewPost extends StatefulWidget {
 }
 
 class _NewPostState extends State<NewPost> {
-  final User user = FirebaseAuth.instance.currentUser!;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController statusController = TextEditingController();
   String _emoji="";
   final maxStatusCount = 20;
@@ -27,6 +28,7 @@ class _NewPostState extends State<NewPost> {
 
   @override
   Widget build(BuildContext context) {
+    UserClass? user = Provider.of<UserProvider>(context).getUser;
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -126,7 +128,12 @@ class _NewPostState extends State<NewPost> {
               Material(
                 child: InkWell(
                   onTap: () {
-                    AuthMethods().sendPost(uid: user.uid, status: statusController.text, emoji: _emoji);
+                    AuthMethods().sendPost(
+                        uid: user!.uid,
+                        status: statusController.text,
+                        emoji: _emoji,
+                        friends: user!.friends,
+                    );
                     Navigator.pop(context);
 
                   },

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moood/components/post_card.dart';
 import 'package:moood/screens/profile.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,7 @@ import '../utils/helper_functions.dart';
 import '../utils/input_decoration.dart';
 
 class StreamInterface extends StatefulWidget {
-  StreamInterface({Key? key}) : super(key: key);
+  const StreamInterface({Key? key}) : super(key: key);
 
   @override
   StreamInterfaceState createState() {
@@ -21,78 +22,82 @@ class StreamInterface extends StatefulWidget {
 }
 
 class StreamInterfaceState extends State<StreamInterface> {
-  final User user = FirebaseAuth.instance.currentUser!;
-
-
-  StreamInterfaceState({Key? key}) {
-    List<String>? split = user.displayName?.split(" ");
-    firstName = split![0];
-    lastName = split[1];
-  }
-
-  String firstName = "";
-  String lastName = "";
-
-
-
   @override
   Widget build(BuildContext context) {
     UserClass? usr = Provider.of<UserProvider>(context).getUser;
 
-
-
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: secondaryColor,
-          centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text("App", style: TextStyle(color: primaryColor)),
-            ],
-          ),
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {},
-              );
-            },
-          ),
-          actions: [
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: IconButton(
-                  icon: const Icon(Icons.account_circle,
-                      color: primaryColor, size: 30),
-                  onPressed: () {
-                    Route route = MaterialPageRoute(
-                        builder: (context) => Profile(user: usr));
-                    Navigator.push(context, route);
-                  },
-                )),
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("App", style: TextStyle(color: primaryColor)),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                ),
-                Text("Hi ${firstName}! How are you doing?",
-                    style: TextStyle(
-                      color: secondaryColor,
-                      fontSize: 24,
-                    )),
-                // these are suggested statuses
-
-
-              ],
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {},
+            );
+          },
+        ),
+        actions: [
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: IconButton(
+                icon: const Icon(Icons.account_circle,
+                    color: primaryColor, size: 30),
+                onPressed: () {
+                  Route route = MaterialPageRoute(
+                      builder: (context) => Profile(user: usr));
+                  Navigator.push(context, route);
+                },
+              )),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
             ),
-          ),
-        ));
+            Text(
+              "Hi ${usr?.firstName}! How are you doing?",
+              style: TextStyle(
+                color: secondaryColor,
+                fontSize: 24,
+              ),
+            ),
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('userfeeds')
+                  .doc(usr!.uid)
+                  .collection('feed').orderBy('date', descending: true)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) =>
+                      PostCard(snap: snapshot.data!.docs[index].data()),
+                );
+              },
+            ),
+            // these are suggested statuses
+          ],
+        ),
+      ),
+    );
   }
 }
