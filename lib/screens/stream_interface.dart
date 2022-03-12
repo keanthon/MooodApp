@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moood/screens/profile.dart';
+import 'package:moood/screens/search.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_class.dart';
@@ -10,6 +11,7 @@ import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 import '../utils/input_decoration.dart';
+import 'friend_requests.dart';
 
 class StreamInterface extends StatefulWidget {
   StreamInterface({Key? key}) : super(key: key);
@@ -37,7 +39,7 @@ class StreamInterfaceState extends State<StreamInterface> {
 
   @override
   Widget build(BuildContext context) {
-    UserClass usr = Provider.of<UserProvider>(context).getUser;
+    UserClass user = Provider.of<UserProvider>(context).getUser;
 
 
 
@@ -56,22 +58,34 @@ class StreamInterfaceState extends State<StreamInterface> {
             builder: (BuildContext context) {
               return IconButton(
                 icon: const Icon(Icons.search),
-                onPressed: () {},
+                onPressed: () {
+                  goToPage(Search(user: user), 2, context);
+                },
               );
             },
           ),
           actions: [
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: IconButton(
-                  icon: const Icon(Icons.account_circle,
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.group,
                       color: primaryColor, size: 30),
                   onPressed: () {
-                    Route route = MaterialPageRoute(
-                        builder: (context) => Profile(user: usr));
-                    Navigator.push(context, route);
+                    goToPage(FriendRequests(user: user), 2, context);
                   },
-                )),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: IconButton(
+                    icon: const Icon(Icons.account_circle,
+                        color: primaryColor, size: 30),
+                    onPressed: () {
+                      goToPage(Profile(user: user), 2, context);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -82,13 +96,11 @@ class StreamInterfaceState extends State<StreamInterface> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                 ),
-                Text("Hi ${firstName}! How are you doing?",
+                Text("Hi $firstName! How are you doing?",
                     style: TextStyle(
                       color: secondaryColor,
                       fontSize: 24,
                     )),
-                // these are suggested statuses
-
 
               ],
             ),

@@ -6,6 +6,9 @@ import "package:flutter/material.dart";
 import 'package:moood/models/post.dart';
 import 'package:moood/models/user_class.dart';
 
+import '../utils/globals.dart';
+import '../utils/helper_functions.dart';
+
 // Firebase Authentication Methods
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,7 +42,7 @@ class AuthMethods {
 
         await _auth.currentUser?.updateDisplayName(firstName + " " + lastName);
 
-        print(cred.user!.uid);
+        //print(cred.user!.uid);
         // add user info to database
 
         UserClass usr = UserClass(
@@ -47,13 +50,13 @@ class AuthMethods {
             username: username,
             firstName: firstName,
             lastName: lastName,
+            fullName: "$firstName $lastName#${getShortUID(cred.user!.uid)}",
             email: email,
             bio: '',
-            followers: [],
-            following: [],
+            friends: [],
         );
 
-        _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
+        await _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
 
 
         res = "success";
