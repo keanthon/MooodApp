@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class postData {
+  final DateTime date;
   final String uid;
   final String status;
   final String emoji;
@@ -12,11 +13,13 @@ class postData {
     required this.uid,
     required this.status,
     required this.emoji,
+    required this.date,
   });
 
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'status': status,
     'emoji': emoji,
+    'date': date,
   };
 }
