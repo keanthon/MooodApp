@@ -25,10 +25,6 @@ class StreamInterface extends StatefulWidget {
 
 class StreamInterfaceState extends State<StreamInterface> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Map<String, dynamic> myLatestPost = {
-    "status": "",
-    "emoji": "",
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +33,13 @@ class StreamInterfaceState extends State<StreamInterface> {
     // listen for changes to friends array
     _firestore.collection("users").doc(user?.uid).snapshots().listen((DocumentSnapshot ds) {
       if (ds.exists) {
+        List myPostsDB = [];
         List friendsList = [];
-        String status = "";
-        String emoji = "";
 
         // status changed
-        List posts = (ds.get("posts") as List);
-        if (posts.isNotEmpty) {
-          if (posts.last["status"].toString() != myLatestPost["status"].toString()) {
-            status = posts.last["status"];
-            emoji = posts.last["emoji"];
+        if ((ds.get("posts") as List).isNotEmpty) {
+          if (user!.posts.isEmpty || (ds.get("posts") as List).last.toString() != user.posts.last.toString()) {
+            myPostsDB = (ds.get("posts") as List);
           }
         }
 
@@ -54,14 +47,27 @@ class StreamInterfaceState extends State<StreamInterface> {
         if ((ds.get("friends") as List).isNotEmpty) {
           if (user!.friends.isEmpty || (ds.get("friends") as List).last.toString() != user.friends.last.toString()) {
             friendsList = (ds.get("friends") as List);
+
+            print("new friend");
+
+            // batch new posts to new friend
+            if (user.posts.isNotEmpty) {
+              var batch = _firestore.batch();
+              for (var i = user.friends.length; i < friendsList.length; ++i) {
+                user.posts.forEach((element) {
+                  var ref = _firestore.collection("userfeeds").doc(friendsList[i]["UID"]).collection("feed").doc();
+                  batch.set(ref, element);
+                });
+              }
+              batch.commit();
+            }
           }
         }
 
-        if (status != "" || friendsList.isNotEmpty) {
+        if (myPostsDB.isNotEmpty || friendsList.isNotEmpty) {
           setState(() {
-            myLatestPost["status"] = status;
-            myLatestPost["emoji"] = emoji;
-            user!.friends = friendsList;
+            user!.posts = myPostsDB.isNotEmpty ? myPostsDB : user.posts;
+            user.friends = friendsList.isNotEmpty ? friendsList : user.friends;
           });
         }
       }
@@ -127,10 +133,6 @@ class StreamInterfaceState extends State<StreamInterface> {
                   fontSize: 24,
                 ),
               ),
-              PostCard(snap: {
-                "status": myLatestPost["status"],
-                "emoji": myLatestPost["emoji"],
-              }),
               const Text(
                 "How your friends are doing...",
                 style: TextStyle(

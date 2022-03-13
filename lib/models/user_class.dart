@@ -9,7 +9,7 @@ class UserClass {
   final String email;
   final String bio;
   List friends;
-  final List posts;
+  List posts;
 
   UserClass({
     required this.uid,
