@@ -55,11 +55,6 @@ class FriendRequestsState extends State<FriendRequests> {
         "fullName": req["fullName"],
       }])});
 
-    user.friends.add({
-      "UID": req["UID"],
-      "fullName": req["fullName"],
-    });
-
     // add to target friend list
     _firestore.collection("users").doc(req["UID"])
       .update({"friends": FieldValue.arrayUnion([{
