@@ -24,9 +24,48 @@ class StreamInterface extends StatefulWidget {
 }
 
 class StreamInterfaceState extends State<StreamInterface> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Map<String, dynamic> myLatestPost = {
+    "status": "",
+    "emoji": "",
+  };
+
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
+    
+    // listen for changes to friends array
+    _firestore.collection("users").doc(user?.uid).snapshots().listen((DocumentSnapshot ds) {
+      if (ds.exists) {
+        List friendsList = [];
+        String status = "";
+        String emoji = "";
+
+        // status changed
+        List posts = (ds.get("posts") as List);
+        if (posts.isNotEmpty) {
+          if (posts.last["status"].toString() != myLatestPost["status"].toString()) {
+            status = posts.last["status"];
+            emoji = posts.last["emoji"];
+          }
+        }
+
+        // new friend added
+        if ((ds.get("friends") as List).isNotEmpty) {
+          if (user!.friends.isEmpty || (ds.get("friends") as List).last.toString() != user.friends.last.toString()) {
+            friendsList = (ds.get("friends") as List);
+          }
+        }
+
+        if (status != "" || friendsList.isNotEmpty) {
+          setState(() {
+            myLatestPost["status"] = status;
+            myLatestPost["emoji"] = emoji;
+            user!.friends = friendsList;
+          });
+        }
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +83,7 @@ class StreamInterfaceState extends State<StreamInterface> {
             return IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                goToPage(Search(user: user), 2, context);
+                goToPage(Search(user: user!), 2, context);
               },
             );
           },
@@ -56,7 +95,7 @@ class StreamInterfaceState extends State<StreamInterface> {
                 icon: const Icon(Icons.group,
                     color: primaryColor, size: 30),
                 onPressed: () {
-                  goToPage(FriendRequests(user: user), 2, context);
+                  goToPage(FriendRequests(user: user!), 2, context);
                 },
               ),
               Padding(
@@ -73,43 +112,55 @@ class StreamInterfaceState extends State<StreamInterface> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-            ),
-            Text(
-              "Hi ${user?.firstName}! How are you doing?",
-              style: TextStyle(
-                color: secondaryColor,
-                fontSize: 24,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
               ),
-            ),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('userfeeds')
-                  .doc(user!.uid)
-                  .collection('feed').orderBy('date', descending: true)
-                  .snapshots(),
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+              Text(
+                "Hi ${user?.firstName}! How are you doing?",
+                style: TextStyle(
+                  color: secondaryColor,
+                  fontSize: 24,
+                ),
+              ),
+              PostCard(snap: {
+                "status": myLatestPost["status"],
+                "emoji": myLatestPost["emoji"],
+              }),
+              const Text(
+                "How your friends are doing...",
+                style: TextStyle(
+                  color: secondaryColor,
+                  fontSize: 24,
+                ),
+              ),
+              StreamBuilder(
+                stream: _firestore
+                    .collection('userfeeds')
+                    .doc(user!.uid)
+                    .collection('feed').orderBy('date', descending: true)
+                    .snapshots(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) =>
+                        PostCard(snap: snapshot.data!.docs[index].data()),
                   );
-                }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) =>
-                      PostCard(snap: snapshot.data!.docs[index].data()),
-                );
-              },
-            ),
-            // these are suggested statuses
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
