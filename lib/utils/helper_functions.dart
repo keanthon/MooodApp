@@ -1,19 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:moood/utils/globals.dart';
+import '../models/user_class.dart';
 import '../responsive/responsive_layout.dart';
 import '../screens/stream_interface.dart';
 import 'colors_styles.dart';
-
-class appUser {
-  final String firstName;
-  final String lastName;
-  List<String> userStatuses;
-
-  appUser(this.firstName, this.lastName, this.userStatuses);
-}
-
 
 // 1 for push replace, 2 for push, 3 for pushandremoveuntil
 void goToPage(Widget page, int pushReplace, BuildContext context ) {
@@ -43,24 +36,46 @@ Container redCenteredContainer(String text, bool selected) {
   );
 }
 
-Widget generate_posts(List<String> input) {
-  return Column(children: input.reversed.map((value) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          color: tertiaryColor,
-        ),
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(20),
-        child: Text(
-            value,
-            style: TextStyle(
+String getShortUID(String uid) {
+  return uid.substring(0, maxIDSize);
+}
+
+List<Map<String, String>> castIntoListMap(dynamic value) {
+  return (value as List).map((e) {
+    return (e as Map<String, dynamic>).map((key, value) => MapEntry(key, value!.toString()));
+  }).toList();
+}
+
+Set<String> castIntoUIDSet(dynamic value) {
+  Set<String> s = {};
+  for (var e in (value as List)) {
+    s.add((e as Map<String, dynamic>)["UID"]);
+  }
+  return s;
+}
+
+Widget displayFriends(List<Map<String, String>> friendRequests) {
+  return Column(
+    children: friendRequests.reversed.map((req) {
+      return (
+        Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            color: tertiaryColor,
+          ),
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(25),
+          child: Text(
+            req["fullName"]!,
+            style: const TextStyle(
               fontSize: 18,
               color: primaryColor,
             )
+          )
         )
-    );
-  }).toList());
+      );
+    }).toList(),
+  );
 }
 
 showSnackBar(String content, BuildContext context) {
