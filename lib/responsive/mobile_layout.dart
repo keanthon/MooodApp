@@ -53,11 +53,11 @@ class _MobileLayoutState extends State<MobileLayout> {
 
         children: [
           StreamInterface(),
-          Profile(user: user),
+          // Profile(user: user),
           // Search(user: user),
           // FriendRequests(user: user),
-          Text('Map'),
-          Text('Home'),
+          // Text('Map'),
+          // Text('Home'),
         ],
       ),
       // bottomNavigationBar: CurvedNavigationBar(
