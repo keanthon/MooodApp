@@ -48,8 +48,6 @@ class StreamInterfaceState extends State<StreamInterface> {
           if (user!.friends.isEmpty || (ds.get("friends") as List).last.toString() != user.friends.last.toString()) {
             friendsList = (ds.get("friends") as List);
 
-            print("new friend");
-
             // batch new posts to new friend
             if (user.posts.isNotEmpty) {
               var batch = _firestore.batch();
@@ -118,52 +116,48 @@ class StreamInterfaceState extends State<StreamInterface> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-              ),
-              Text(
-                "Hi ${user?.firstName}! How are you doing?",
-                style: TextStyle(
-                  color: secondaryColor,
-                  fontSize: 24,
-                ),
-              ),
-              const Text(
-                "How your friends are doing...",
-                style: TextStyle(
-                  color: secondaryColor,
-                  fontSize: 24,
-                ),
-              ),
-              StreamBuilder(
-                stream: _firestore
-                    .collection('userfeeds')
-                    .doc(user!.uid)
-                    .collection('feed').orderBy('date', descending: true)
-                    .snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) =>
-                        PostCard(snap: snapshot.data!.docs[index].data()),
-                  );
-                },
-              ),
-            ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
           ),
-        ),
+          Text(
+            "Hi ${user?.firstName}! How are you doing?",
+            style: TextStyle(
+              color: secondaryColor,
+              fontSize: 24,
+            ),
+          ),
+          const Text(
+            "How your friends are doing...",
+            style: TextStyle(
+              color: secondaryColor,
+              fontSize: 24,
+            ),
+          ),
+          StreamBuilder(
+            stream: _firestore
+                .collection('userfeeds')
+                .doc(user!.uid)
+                .collection('feed').orderBy('date', descending: true)
+                .snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) =>
+                    PostCard(snap: snapshot.data!.docs[index].data()),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
