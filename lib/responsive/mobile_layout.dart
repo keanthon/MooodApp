@@ -10,7 +10,9 @@ import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/utils/helper_functions.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/friend_requests.dart';
 import '../screens/new_post_screen.dart';
+import '../screens/search.dart';
 import '../screens/stream_interface.dart';
 
 class MobileLayout extends StatefulWidget {
@@ -51,10 +53,11 @@ class _MobileLayoutState extends State<MobileLayout> {
 
         children: [
           StreamInterface(),
-          Profile(user: user),
-          Text('Search', style: TextStyle(color: Colors.blue),),
-          Text('Map'),
-          Text('Home'),
+          // Profile(user: user),
+          // Search(user: user),
+          // FriendRequests(user: user),
+          // Text('Map'),
+          // Text('Home'),
         ],
       ),
       // bottomNavigationBar: CurvedNavigationBar(

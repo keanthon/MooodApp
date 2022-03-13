@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:moood/models/post.dart';
 import 'package:moood/models/user_class.dart';
+import '../utils/helper_functions.dart';
 
 // Firebase Authentication Methods
 class AuthMethods {
@@ -46,6 +47,7 @@ class AuthMethods {
             username: username,
             firstName: firstName,
             lastName: lastName,
+            fullName: "$firstName $lastName#${getShortUID(cred.user!.uid)}",
             email: email,
             bio: '',
             friends: [],
@@ -100,7 +102,7 @@ class AuthMethods {
       // put in my
       // put in my friends feed
       for(var friend in friends) {
-        await _firestore.collection("userfeeds").doc(friend).collection("feed").add(pos);
+        await _firestore.collection("userfeeds").doc(friend["UID"]).collection("feed").add(pos);
       }
       res = "success";
     } catch(err) {
