@@ -102,7 +102,7 @@ class AuthMethods {
       // put in my
       // put in my friends feed
       for(var friend in friends) {
-        await _firestore.collection("userfeeds").doc(friend).collection("feed").add(pos);
+        await _firestore.collection("userfeeds").doc(friend["UID"]).collection("feed").add(pos);
       }
       res = "success";
     } catch(err) {
