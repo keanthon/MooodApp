@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class postData {
+class PostData {
   final DateTime date;
   final String uid;
   final String status;
@@ -9,7 +11,7 @@ class postData {
   // final String audioClipDir;
   // Location
 
-  const postData({
+  const PostData({
     required this.uid,
     required this.status,
     required this.emoji,
@@ -22,4 +24,67 @@ class postData {
     'emoji': emoji,
     'date': date,
   };
+}
+
+class PostsModel {
+  bool hasMore = true;
+  final int limit = 7;
+  late QueryDocumentSnapshot lastVisibile;
+  bool _isLoading = false;
+  List<QueryDocumentSnapshot> _data = [];
+  final StreamController<List<QueryDocumentSnapshot>> _controller = StreamController.broadcast();
+  late Stream<List<QueryDocumentSnapshot>> stream;
+
+  final String uid;
+
+  PostsModel({required this.uid}) {
+    stream = _controller.stream;
+    refresh();
+  }
+
+
+  Future<void> refresh() {
+    return loadMore(clearCachedData: true);
+  }
+
+  Future<void> loadMore({bool clearCachedData = false}) async {
+
+    if (clearCachedData) {
+      _data = [];
+      hasMore = true;
+    }
+    if (_isLoading || !hasMore) {
+      return Future.value();
+    }
+    _isLoading = true;
+    QuerySnapshot snapshots;
+
+    if(clearCachedData) {
+      snapshots = await FirebaseFirestore.instance
+          .collection('userfeeds')
+          .doc(uid)
+          .collection('feed')
+          .orderBy('date', descending: true)
+          .limit(limit).get();
+      lastVisibile = snapshots.docs[snapshots.docs.length-1];
+      _data = snapshots.docs;
+      print(_data);
+    }
+    else {
+      print("here1");
+      snapshots = await FirebaseFirestore.instance
+          .collection('userfeeds')
+          .doc(uid)
+          .collection('feed')
+          .orderBy('date', descending: true).startAfterDocument(lastVisibile)
+          .limit(limit).get();
+      print("here");
+      _data.addAll(snapshots.docs);
+    }
+    print(uid);
+    _isLoading = false;
+    hasMore = (snapshots.docs.length == limit);
+    _controller.add(_data);
+
+  }
 }
