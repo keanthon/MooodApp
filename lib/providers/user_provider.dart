@@ -10,7 +10,7 @@ class UserProvider with ChangeNotifier {
 
   // Syntatic sugar
   // same as UserClass getUser(){ return _user;}
-  UserClass? get getUser => _user;
+  UserClass get getUser => _user!;
 
   Future<void> refreshUser() async {
     // user data gets updated

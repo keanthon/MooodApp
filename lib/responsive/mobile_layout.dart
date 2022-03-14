@@ -48,18 +48,19 @@ class _MobileLayoutState extends State<MobileLayout> {
           goToPage(NewPost(), 2, context);
         },
       ),
-      body: PageView(
-        controller: _pageController,
 
-        children: [
-          StreamInterface(),
-          // Profile(user: user),
-          // Search(user: user),
-          // FriendRequests(user: user),
-          // Text('Map'),
-          // Text('Home'),
-        ],
-      ),
+      body: StreamInterface(),
+      // body: PageView(
+      //   controller: _pageController,
+      //
+      //   children: [
+      //     StreamInterface(),
+      //     Profile(user: user),
+      //     Text('Search', style: TextStyle(color: Colors.blue),),
+      //     Text('Map'),
+      //     Text('Home'),
+      //   ],
+      // ),
       // bottomNavigationBar: CurvedNavigationBar(
       //   backgroundColor: Colors.purpleAccent,
       //   color: Colors.deepPurpleAccent,

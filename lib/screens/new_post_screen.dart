@@ -129,10 +129,10 @@ class _NewPostState extends State<NewPost> {
                 child: InkWell(
                   onTap: () {
                     AuthMethods().sendPost(
-                        uid: user!.uid,
+                        uid: user.uid,
                         status: statusController.text,
                         emoji: _emoji,
-                        friends: user!.friends,
+                        friends: user.friends,
                     );
                     Navigator.pop(context);
 
