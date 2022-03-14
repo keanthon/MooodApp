@@ -10,6 +10,7 @@ import '../utils/helper_functions.dart';
 
 class Profile extends StatelessWidget {
   UserClass? user;
+
   Profile({Key? key, required this.user});
 
   @override
@@ -43,6 +44,7 @@ class Profile extends StatelessWidget {
                     backgroundImage: AssetImage('assets/images/logo.jpg'),
                   ),
                   Text(
+
                       "Hi ${user!.firstName} ${user!.lastName}!\n#${getShortUID(user!.uid)}",
                       style: TextStyle(
                         fontSize: 24,

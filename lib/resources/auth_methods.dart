@@ -90,7 +90,7 @@ class AuthMethods {
     required String emoji,
     required List friends,
   }) async {
-    var pos = postData(uid: uid, status: status, emoji: emoji, date: DateTime.now()).toJson();
+    var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now()).toJson();
     String res = "Error";
 
     try {
@@ -102,7 +102,9 @@ class AuthMethods {
       // put in my
       // put in my friends feed
       for(var friend in friends) {
+
         await _firestore.collection("userfeeds").doc(friend["UID"]).collection("feed").add(pos);
+
       }
       res = "success";
     } catch(err) {

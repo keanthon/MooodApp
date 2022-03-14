@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moood/components/fetch_posts.dart';
 import 'package:moood/components/post_card.dart';
 import 'package:moood/screens/profile.dart';
 import 'package:moood/screens/search.dart';
@@ -96,8 +97,7 @@ class StreamInterfaceState extends State<StreamInterface> {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.group,
-                    color: primaryColor, size: 30),
+                icon: const Icon(Icons.group, color: primaryColor, size: 30),
                 onPressed: () {
                   goToPage(FriendRequests(user: user!), 2, context);
                 },
@@ -116,49 +116,7 @@ class StreamInterfaceState extends State<StreamInterface> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-          ),
-          Text(
-            "Hi ${user?.firstName}! How are you doing?",
-            style: TextStyle(
-              color: secondaryColor,
-              fontSize: 24,
-            ),
-          ),
-          const Text(
-            "How your friends are doing...",
-            style: TextStyle(
-              color: secondaryColor,
-              fontSize: 24,
-            ),
-          ),
-          StreamBuilder(
-            stream: _firestore
-                .collection('userfeeds')
-                .doc(user!.uid)
-                .collection('feed').orderBy('date', descending: true)
-                .snapshots(),
-            builder: (context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) =>
-                    PostCard(snap: snapshot.data!.docs[index].data()),
-              );
-            },
-          ),
-        ],
-      ),
+      body: FetchPosts(uid: user.uid),
     );
   }
 }
