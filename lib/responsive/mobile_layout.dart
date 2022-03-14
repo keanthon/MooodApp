@@ -10,7 +10,9 @@ import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/utils/helper_functions.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/friend_requests.dart';
 import '../screens/new_post_screen.dart';
+import '../screens/search.dart';
 import '../screens/stream_interface.dart';
 
 class MobileLayout extends StatefulWidget {
@@ -46,6 +48,7 @@ class _MobileLayoutState extends State<MobileLayout> {
           goToPage(NewPost(), 2, context);
         },
       ),
+
       body: StreamInterface(),
       // body: PageView(
       //   controller: _pageController,
