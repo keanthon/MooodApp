@@ -33,11 +33,12 @@ class _FetchPostsState extends State<FetchPosts> {
       stream: posts.stream,
       builder: (BuildContext _context, AsyncSnapshot _snapshot) {
         if (!_snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Text('Much Lonely, Add Friends'));
         } else {
           return RefreshIndicator(
             onRefresh: posts.refresh,
             child: ListView.separated(
+              physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 8.0),
               controller: scrollController,
