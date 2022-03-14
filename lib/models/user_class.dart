@@ -8,10 +8,10 @@ class UserClass {
   final String fullName;
   final String email;
   final String bio;
-  final List friends;
-  final List posts;
+  List friends;
+  List posts;
 
-  const UserClass({
+  UserClass({
     required this.uid,
     required this.username,
     required this.firstName,

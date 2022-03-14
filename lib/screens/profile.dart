@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
@@ -9,11 +10,8 @@ import '../utils/helper_functions.dart';
 
 class Profile extends StatelessWidget {
   UserClass? user;
-  Profile({Key? key, required this.user}): super(key: key) {
-    friendRequests = castIntoListMap(user!.friends);
-  }
 
-  List<Map<String, String>> friendRequests = [];
+  Profile({Key? key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,8 @@ class Profile extends StatelessWidget {
                     backgroundImage: AssetImage('assets/images/logo.jpg'),
                   ),
                   Text(
-                      "Hi ${user?.firstName} ${user?.lastName}!\n#${getShortUID(user!.uid)}",
+
+                      "Hi ${user!.firstName} ${user!.lastName}!\n#${getShortUID(user!.uid)}",
                       style: TextStyle(
                         fontSize: 24,
                         color: secondaryColor,
@@ -89,7 +88,7 @@ class Profile extends StatelessWidget {
                       color: secondaryColor,
                     )
                   ),
-                  displayFriends(friendRequests),
+                  displayFriends(castIntoListMap(user!.friends)),
                   ElevatedButton(
                     child: Text("Sign Out"),
                     onPressed: () async {
