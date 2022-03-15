@@ -25,6 +25,12 @@ class MobileLayout extends StatefulWidget {
 class _MobileLayoutState extends State<MobileLayout> {
   String username = "";
   final PageController _pageController = PageController();
+  int _bottomIndex = 0;
+  int keyCount = 0;
+  List<Widget> _screens = [
+    StreamInterface(),
+    Profile(),
+  ];
 
   @override
   void initState() {
@@ -37,7 +43,6 @@ class _MobileLayoutState extends State<MobileLayout> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
@@ -49,31 +54,40 @@ class _MobileLayoutState extends State<MobileLayout> {
         },
       ),
 
-      body: StreamInterface(),
-      // body: PageView(
-      //   controller: _pageController,
-      //
-      //   children: [
-      //     StreamInterface(),
-      //     Profile(user: user),
-      //     Text('Search', style: TextStyle(color: Colors.blue),),
-      //     Text('Map'),
-      //     Text('Home'),
-      //   ],
-      // ),
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   backgroundColor: Colors.purpleAccent,
-      //   color: Colors.deepPurpleAccent,
-      //     items: <Widget>[
-      //       Icon(Icons.add, size: 30),
-      //       Icon(Icons.list, size: 30),
-      //       Icon(Icons.compare_arrows, size: 30),
-      //     ],
-      //     onTap: (index) {
-      //       //Handle button tap
-      //     },
-      // ),
+      // body: StreamInterface(),
+      body: IndexedStack(
+        index: _bottomIndex,
+        children: _screens,
 
+      ),
+
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 60,
+        backgroundColor: Colors.purpleAccent,
+        color: Colors.deepPurpleAccent,
+        animationDuration: Duration(milliseconds: 200),
+        index: _bottomIndex,
+        items: <Widget>[
+          Icon(Icons.feed, size: 30),
+          Icon(Icons.account_circle, size: 30),
+        ],
+        onTap: (index) {
+          //Handle button tap
+          setState(() {
+            _bottomIndex = index;
+          });
+
+          // reclick on feed againn to refresh
+          if(index==0 && _bottomIndex==0) {
+            setState(() {
+              keyCount = keyCount+1;
+              _screens[0] = StreamInterface(key: Key("${keyCount}"),);
+              print(keyCount);
+            });
+          }
+
+        },
+      ),
     );
   }
 }

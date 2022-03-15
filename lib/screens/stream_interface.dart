@@ -102,16 +102,16 @@ class StreamInterfaceState extends State<StreamInterface> {
                   goToPage(FriendRequests(user: user!), 2, context);
                 },
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: IconButton(
-                  icon: const Icon(Icons.account_circle,
-                      color: primaryColor, size: 30),
-                  onPressed: () {
-                    goToPage(Profile(user: user), 2, context);
-                  },
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 16),
+              //   child: IconButton(
+              //     icon: const Icon(Icons.account_circle,
+              //         color: primaryColor, size: 30),
+              //     onPressed: () {
+              //       goToPage(Profile(), 2, context);
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ],
