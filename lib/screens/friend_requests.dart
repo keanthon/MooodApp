@@ -47,23 +47,66 @@ class FriendRequestsState extends State<FriendRequests> {
     }])});
   }
 
-  void acceptFriendRequest(Map<String, String> req) {
+  Future<void> acceptFriendRequest(Map<String, String> req) async {
     // add to my friend list
-    _firestore.collection("users").doc(user.uid)
-      .update({"friends": FieldValue.arrayUnion([{
+    WriteBatch batch = _firestore.batch();
+    var ref = _firestore.collection("users").doc(user.uid);
+    batch.update(ref, {"friends": FieldValue.arrayUnion([{
         "UID": req["UID"],
         "fullName": req["fullName"],
       }])});
 
     // add to target friend list
-    _firestore.collection("users").doc(req["UID"])
-      .update({"friends": FieldValue.arrayUnion([{
+    ref = _firestore.collection("users").doc(req["UID"]);
+    batch.update(ref, {"friends": FieldValue.arrayUnion([{
         "UID": user.uid,
         "fullName": user.fullName,
-    }])});
+      }])});
+
+    await batch.commit();
 
     // remove from friend requests
     removeFriendRequest(req);
+
+
+    List<WriteBatch> batchArray = [];
+    batchArray.add(_firestore.batch());
+    int operationCount =0, batchIndex = 0;
+
+    // get my post and add to friends feed
+    var snapshot = await _firestore.collection("userfeed").doc(user.uid).collection("posts").get();
+    if(snapshot.docs.isNotEmpty) {
+      for (var post in snapshot.docs) {
+        ref = _firestore.collection("userfeed").doc(req["UID"]).collection("feed").doc();
+        batchArray[batchIndex].set(ref, post.data());
+        operationCount++;
+        if (operationCount > 490) {
+          batchArray.add(_firestore.batch());
+          batchIndex++;
+          operationCount = 0;
+        }
+      }
+    }
+
+    // get my friend's post and add to my feed
+    snapshot = await _firestore.collection("userfeed").doc(req["UID"]).collection("posts").get();
+    if(snapshot.docs.isNotEmpty) {
+      for (var post in snapshot.docs) {
+        ref = _firestore.collection("userfeed").doc(user.uid).collection("feed").doc();
+        batchArray[batchIndex].set(ref, post.data());
+        operationCount++;
+        if (operationCount > 490) {
+          batchArray.add(_firestore.batch());
+          batchIndex++;
+          operationCount = 0;
+        }
+      }
+    }
+
+    print("in friend request");
+    for(var b in batchArray) {
+      await b.commit();
+    }
   }
 
   List<Widget> displayFriendRequestList() {
