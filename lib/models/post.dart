@@ -24,6 +24,7 @@ class PostData {
     'emoji': emoji,
     'date': date,
   };
+
 }
 
 class PostsModel {
@@ -61,19 +62,21 @@ class PostsModel {
 
     if(clearCachedData) {
       snapshots = await FirebaseFirestore.instance
-          .collection('userfeeds')
+          .collection('userfeed')
           .doc(uid)
           .collection('feed')
           .orderBy('date', descending: true)
           .limit(limit).get();
-      lastVisibile = snapshots.docs[snapshots.docs.length-1];
+      if(snapshots.docs.isNotEmpty) {
+        lastVisibile = snapshots.docs[snapshots.docs.length - 1];
+      }
       _data = snapshots.docs;
       print(_data);
     }
     else {
       print("here1");
       snapshots = await FirebaseFirestore.instance
-          .collection('userfeeds')
+          .collection('userfeed')
           .doc(uid)
           .collection('feed')
           .orderBy('date', descending: true).startAfterDocument(lastVisibile)

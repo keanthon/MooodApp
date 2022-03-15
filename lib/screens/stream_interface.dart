@@ -30,47 +30,6 @@ class StreamInterfaceState extends State<StreamInterface> {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
-    
-    // listen for changes to friends array
-    _firestore.collection("users").doc(user?.uid).snapshots().listen((DocumentSnapshot ds) {
-      if (ds.exists) {
-        List myPostsDB = [];
-        List friendsList = [];
-
-        // status changed
-        if ((ds.get("posts") as List).isNotEmpty) {
-          if (user!.posts.isEmpty || (ds.get("posts") as List).last.toString() != user.posts.last.toString()) {
-            myPostsDB = (ds.get("posts") as List);
-          }
-        }
-
-        // new friend added
-        if ((ds.get("friends") as List).isNotEmpty) {
-          if (user!.friends.isEmpty || (ds.get("friends") as List).last.toString() != user.friends.last.toString()) {
-            friendsList = (ds.get("friends") as List);
-
-            // batch new posts to new friend
-            if (user.posts.isNotEmpty) {
-              var batch = _firestore.batch();
-              for (var i = user.friends.length; i < friendsList.length; ++i) {
-                user.posts.forEach((element) {
-                  var ref = _firestore.collection("userfeeds").doc(friendsList[i]["UID"]).collection("feed").doc();
-                  batch.set(ref, element);
-                });
-              }
-              batch.commit();
-            }
-          }
-        }
-
-        if (myPostsDB.isNotEmpty || friendsList.isNotEmpty) {
-          setState(() {
-            user!.posts = myPostsDB.isNotEmpty ? myPostsDB : user.posts;
-            user.friends = friendsList.isNotEmpty ? friendsList : user.friends;
-          });
-        }
-      }
-    });
 
     return Scaffold(
       appBar: AppBar(
@@ -116,7 +75,7 @@ class StreamInterfaceState extends State<StreamInterface> {
           ),
         ],
       ),
-      body: FetchPosts(uid: user.uid),
+      body: FetchPosts(uid: user!.uid),
     );
   }
 }
