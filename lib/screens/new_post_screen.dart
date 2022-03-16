@@ -1,16 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moood/resources/auth_methods.dart';
-import 'package:moood/screens/profile.dart';
 import 'package:provider/provider.dart';
-
 import '../models/user_class.dart';
 import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 import '../utils/input_decoration.dart';
+import 'package:sound_stream/sound_stream.dart';
 
 class NewPost extends StatefulWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -25,6 +24,73 @@ class _NewPostState extends State<NewPost> {
   final maxStatusCount = 20;
   bool select1=false, select2=false, select3=false, select4=false, select5=false;
   List<String> userStatuses = [];
+
+  late Timer _timer;
+  int _totalRecording = 5;
+  bool _counterVisible = false;
+
+  final RecorderStream _recorder = RecorderStream();
+
+  List<Uint8List> recorderInput = [];
+  bool _isRecording = false;
+
+  late StreamSubscription _recorderStatus;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (mounted) {
+          if (_totalRecording == 0) {
+            stopRecording();
+          } else {
+            setState(() {
+              _totalRecording--;
+            });
+          }
+        }
+      },
+    );
+  }
+
+  void stopRecording() {
+    if (_isRecording) {
+      _recorder.stop();
+    }
+    setState(() {
+      _timer.cancel();
+      _counterVisible = false;
+      _totalRecording = 5;
+    });
+  }
+
+  Future<void> initializeRecorder() async {
+    _recorderStatus = _recorder.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isRecording = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    _recorder.audioStream.listen((data) {
+      recorderInput.add(data);
+    });
+
+    await _recorder.initialize();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeRecorder();
+  }
+
+  @override
+  void dispose() {
+    _recorderStatus.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +164,37 @@ class _NewPostState extends State<NewPost> {
                         ),
 
                       ])),
+              GestureDetector(
+                onLongPressStart: (_) async {
+                  _recorder.start();
+                  recorderInput.clear();
+                  setState(() {
+                    startTimer();
+                    _counterVisible = true;
+                  });
+                },
+                onLongPressEnd: (_) {
+                  stopRecording();
+                },
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  label: const Text("Hold to record audio"),
+                  icon: const Icon(Icons.mic),
+                ),
+              ),
+              Visibility(
+                visible: _counterVisible,
+                child: Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Text(
+                    _totalRecording.toString(),
+                    style: const TextStyle(
+                      color: secondaryColor,
+                      fontSize: 60,
+                    )
+                  ),
+                ),
+              ),
               Container(
                 margin:
                 EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
@@ -124,7 +221,6 @@ class _NewPostState extends State<NewPost> {
                       .decorate(),
                 ),
               ),
-              // FIXME friends
               Material(
                 child: InkWell(
                   onTap: () async {
@@ -137,7 +233,9 @@ class _NewPostState extends State<NewPost> {
                         uid: user!.uid,
                         status: statusController.text,
                         emoji: _emoji,
-                        friends: user!.friends,
+                        friends: user.friends,
+                        recorderInput: recorderInput,
+                        fullName: user.fullName,
                     );
                     Navigator.pop(context);
 
