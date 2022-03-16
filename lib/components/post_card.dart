@@ -8,37 +8,23 @@ import 'package:sound_stream/sound_stream.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
-  const PostCard({Key? key, required this.snap}) : super(key: key);
+  final List<Uint8List> recorderInput;
+  const PostCard({Key? key, required this.snap, required this.recorderInput}) : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
-  PlayerStream _player = PlayerStream();
-
-  List<Uint8List> recorderInput = [];
-  bool _isPlaying = false;
+  final PlayerStream _player = PlayerStream();
+  bool currentlyPlaying = false;
   bool parsedRecording = false;
-
-  late StreamSubscription _playerStatus;
-
-  Future<void> initializePlayer() async {
-    _playerStatus = _player.status.listen((status) {
-      if (mounted)
-        setState(() {
-          _isPlaying = status == SoundStreamStatus.Playing;
-        });
-    });
-
-    await _player.initialize();
-  }
 
   void _play() async {
     await _player.start();
 
-    if (recorderInput.isNotEmpty) {
-      for (var chunk in recorderInput) {
+    if (widget.recorderInput.isNotEmpty) {
+      for (var chunk in widget.recorderInput) {
         await _player.writeChunk(chunk);
       }
     }
@@ -47,26 +33,11 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-    initializePlayer();
-  }
-
-  @override
-  void dispose() {
-    _playerStatus?.cancel();
-    super.dispose();
+    _player.initialize();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!parsedRecording) {
-      setState(() {
-        recorderInput = (jsonDecode(widget.snap["recorderInput"]) as List).map((e) {
-          return Uint8List.fromList(e.cast<int>());
-        }).toList();
-        parsedRecording = true;
-      });
-    }
-
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,8 +65,20 @@ class _PostCardState extends State<PostCard> {
                 ),
                 IconButton(
                   iconSize: 24.0,
-                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                  onPressed: _isPlaying ? _player.stop : _play,
+                  icon: Icon(currentlyPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: () {
+                    if (currentlyPlaying) {
+                      _player.stop();
+                      setState(() {
+                        currentlyPlaying = false;
+                      });
+                    } else {
+                      _play();
+                      setState(() {
+                        currentlyPlaying = true;
+                      });
+                    }
+                  },
                 ),
               ]
             ),
