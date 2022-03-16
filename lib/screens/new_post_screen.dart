@@ -30,9 +30,9 @@ class _NewPostState extends State<NewPost> {
   bool _counterVisible = false;
 
   final RecorderStream _recorder = RecorderStream();
-
   List<Uint8List> recorderInput = [];
   bool _isRecording = false;
+  bool alreadyRecorded = false;
 
   late StreamSubscription _recorderStatus;
 
@@ -62,6 +62,7 @@ class _NewPostState extends State<NewPost> {
       _timer.cancel();
       _counterVisible = false;
       _totalRecording = 5;
+      alreadyRecorded = true;
     });
   }
 
@@ -104,7 +105,7 @@ class _NewPostState extends State<NewPost> {
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
               ),
-              Text("Hi ! How are you doing?",
+              const Text("Hi! How's it hanging?",
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 24,
@@ -166,8 +167,8 @@ class _NewPostState extends State<NewPost> {
                       ])),
               GestureDetector(
                 onLongPressStart: (_) async {
-                  _recorder.start();
                   recorderInput.clear();
+                  _recorder.start();
                   setState(() {
                     startTimer();
                     _counterVisible = true;
@@ -178,14 +179,17 @@ class _NewPostState extends State<NewPost> {
                 },
                 child: ElevatedButton.icon(
                   onPressed: () {},
-                  label: const Text("Hold to record audio"),
+                  label: alreadyRecorded ? const Text("Re-record audio!") : const Text("Hold to record audio!"),
                   icon: const Icon(Icons.mic),
+                  style: ElevatedButton.styleFrom(
+                    primary: alreadyRecorded ? secondaryColor : blueColor,
+                  ),
                 ),
               ),
               Visibility(
                 visible: _counterVisible,
                 child: Padding(
-                  padding: EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(25),
                   child: Text(
                     _totalRecording.toString(),
                     style: const TextStyle(
@@ -196,8 +200,7 @@ class _NewPostState extends State<NewPost> {
                 ),
               ),
               Container(
-                margin:
-                EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
+                margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
                 child: TextFormField(
                   validator: requireFunc,
                   controller: statusController,
