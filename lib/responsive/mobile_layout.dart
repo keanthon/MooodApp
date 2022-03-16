@@ -73,10 +73,8 @@ class _MobileLayoutState extends State<MobileLayout> {
         ],
         onTap: (index) {
           //Handle button tap
-          setState(() {
-            _bottomIndex = index;
-          });
 
+          print("bottomindex: ${_bottomIndex}");
           // reclick on feed againn to refresh
           if(index==0 && _bottomIndex==0) {
             setState(() {
@@ -85,6 +83,10 @@ class _MobileLayoutState extends State<MobileLayout> {
               print(keyCount);
             });
           }
+
+          setState(() {
+            _bottomIndex = index;
+          });
 
         },
       ),

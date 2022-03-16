@@ -10,13 +10,17 @@ class FetchPosts extends StatefulWidget {
   const FetchPosts({Key? key, required this.uid, required this.feedOrPost,}) : super(key: key);
 
   String get getUID => uid;
+
   @override
   State<FetchPosts> createState() => _FetchPostsState();
 }
 
-class _FetchPostsState extends State<FetchPosts> {
+class _FetchPostsState extends State<FetchPosts> with AutomaticKeepAliveClientMixin {
   final scrollController = ScrollController();
   late PostsModel posts;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -29,6 +33,7 @@ class _FetchPostsState extends State<FetchPosts> {
     });
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
