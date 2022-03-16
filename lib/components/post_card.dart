@@ -20,8 +20,6 @@ class _PostCardState extends State<PostCard> {
   bool currentlyPlaying = false;
   bool parsedRecording = false;
 
-  late StreamSubscription _playerStatus;
-
   void _play() async {
     await _player.start();
 
@@ -36,12 +34,6 @@ class _PostCardState extends State<PostCard> {
   void initState() {
     super.initState();
     _player.initialize();
-  }
-
-  @override
-  void dispose() {
-    _playerStatus.cancel();
-    super.dispose();
   }
 
   @override
