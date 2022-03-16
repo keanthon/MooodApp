@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
@@ -9,6 +8,7 @@ import '../providers/user_provider.dart';
 import '../resources/auth_methods.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
+import 'my_posts.dart';
 
 class Profile extends StatelessWidget {
 
@@ -61,7 +61,7 @@ class Profile extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     child: Column (
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const <Widget>[
+                        children: <Widget>[
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                           ),
@@ -80,8 +80,12 @@ class Profile extends StatelessWidget {
                                 color: primaryColor,
                               )
                           ),
-                        ]
-                      )
+                          IconButton(
+                              onPressed: () { goToPage( MyPosts(), 2, context);},
+                              icon: Icon(Icons.arrow_forward)
+                          ),
+                        ],
+                      ),
                     ),
                   Text(
                     "Your friends",

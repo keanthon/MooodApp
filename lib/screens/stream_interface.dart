@@ -75,7 +75,7 @@ class StreamInterfaceState extends State<StreamInterface> {
           ),
         ],
       ),
-      body: FetchPosts(uid: user!.uid),
+      body: FetchPosts(uid: user!.uid, feedOrPost: 'feed',),
     );
   }
 }

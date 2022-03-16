@@ -45,8 +45,9 @@ class PostsModel {
   late Stream<List<QueryDocumentSnapshot>> stream;
 
   final String uid;
+  final String feedOrPost;
 
-  PostsModel({required this.uid}) {
+  PostsModel({required this.uid, required this.feedOrPost}) {
     stream = _controller.stream;
     refresh();
   }
@@ -72,7 +73,7 @@ class PostsModel {
       snapshots = await FirebaseFirestore.instance
           .collection('userfeed')
           .doc(uid)
-          .collection('feed')
+          .collection(feedOrPost)
           .orderBy('date', descending: true)
           .limit(limit).get();
       if(snapshots.docs.isNotEmpty) {
@@ -86,7 +87,7 @@ class PostsModel {
       snapshots = await FirebaseFirestore.instance
           .collection('userfeed')
           .doc(uid)
-          .collection('feed')
+          .collection(feedOrPost)
           .orderBy('date', descending: true).startAfterDocument(lastVisibile)
           .limit(limit).get();
       print("here");
