@@ -1,4 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:sound_stream/sound_stream.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -9,16 +15,85 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  PlayerStream _player = PlayerStream();
+
+  List<Uint8List> recorderInput = [];
+  bool _isPlaying = false;
+  bool parsedRecording = false;
+
+  late StreamSubscription _playerStatus;
+
+  Future<void> initializePlayer() async {
+    _playerStatus = _player.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isPlaying = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    await _player.initialize();
+  }
+
+  void _play() async {
+    await _player.start();
+
+    if (recorderInput.isNotEmpty) {
+      for (var chunk in recorderInput) {
+        await _player.writeChunk(chunk);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializePlayer();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!parsedRecording) {
+      setState(() {
+        recorderInput = (jsonDecode(widget.snap["recorderInput"]) as List).map((e) {
+          return Uint8List.fromList(e.cast<int>());
+        }).toList();
+        parsedRecording = true;
+      });
+    }
+
     return Card(
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CircleAvatar(
-            child: Text(widget.snap["emoji"], style: TextStyle(fontSize: 60),),
-            radius: 40,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                child: Text(widget.snap["emoji"], style: TextStyle(fontSize: 60),),
+                radius: 40,
+              ),
+              Text("From ${widget.snap["fullName"]}"),
+            ]
           ),
-          Text(widget.snap["status"]),
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.snap["status"],
+                  style: TextStyle(
+                    fontSize: 24,
+                  )
+                ),
+                IconButton(
+                  iconSize: 24.0,
+                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: _isPlaying ? _player.stop : _play,
+                ),
+              ]
+            ),
+          ),
         ],
       ),
     );
