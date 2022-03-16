@@ -89,8 +89,11 @@ class AuthMethods {
     required String status,
     required String emoji,
     required List friends,
+    required List<Uint8List> recorderInput,
+    required String fullName,
   }) async {
-    var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now()).toJson();
+    var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now(),
+                      recorderInput: recorderInput, fullName: fullName).toJson();
     String res = "Error";
 
     try {
