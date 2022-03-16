@@ -233,9 +233,9 @@ class _NewPostState extends State<NewPost> {
                         uid: user!.uid,
                         status: statusController.text,
                         emoji: _emoji,
-                        friends: user.friends,
+                        friends: user!.friends,
                         recorderInput: recorderInput,
-                        fullName: user.fullName,
+                        fullName: user!.fullName,
                     );
                     Navigator.pop(context);
 

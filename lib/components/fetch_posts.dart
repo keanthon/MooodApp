@@ -6,7 +6,8 @@ import '../utils/colors_styles.dart';
 
 class FetchPosts extends StatefulWidget {
   final String uid;
-  const FetchPosts({Key? key, required this.uid}) : super(key: key);
+  final String feedOrPost;
+  const FetchPosts({Key? key, required this.uid, required this.feedOrPost,}) : super(key: key);
 
   String get getUID => uid;
   @override
@@ -19,7 +20,7 @@ class _FetchPostsState extends State<FetchPosts> {
 
   @override
   void initState() {
-    posts = PostsModel(uid: super.widget.getUID);
+    posts = PostsModel(uid: super.widget.getUID, feedOrPost: super.widget.feedOrPost);
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {
@@ -57,7 +58,7 @@ class _FetchPostsState extends State<FetchPosts> {
                 } else {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: Center(child: Text('Much Lonely, Add Friends', style: TextStyle(color: secondaryColor))),
+                    child: Center(child: Text('Nothing More to Show', style: TextStyle(color: secondaryColor))),
                   );
                 }
               },
