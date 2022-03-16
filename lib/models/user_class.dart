@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:moood/models/post.dart';
 
 class UserClass {
   final String uid;
@@ -9,7 +10,6 @@ class UserClass {
   final String email;
   final String bio;
   List friends;
-  List posts;
 
   UserClass({
     required this.uid,
@@ -20,7 +20,6 @@ class UserClass {
     required this.email,
     required this.bio,
     required this.friends,
-    required this.posts,
   });
 
   Map<String, dynamic> toJson() => {
@@ -32,7 +31,6 @@ class UserClass {
     'email': email,
     'bio': bio,
     'friends': friends,
-    'posts': posts,
   };
 
   // function to decode the json from snapshot
@@ -47,7 +45,6 @@ class UserClass {
         email: snapshot['email'],
         bio: snapshot['bio'],
         friends: snapshot['friends'],
-        posts: snapshot['posts'],
     );
   }
 }
