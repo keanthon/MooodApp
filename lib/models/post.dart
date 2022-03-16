@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -7,6 +9,8 @@ class PostData {
   final String uid;
   final String status;
   final String emoji;
+  final List<Uint8List> recorderInput;
+  final String fullName;
   // FIXME Add audio and location
   // final String audioClipDir;
   // Location
@@ -16,6 +20,8 @@ class PostData {
     required this.status,
     required this.emoji,
     required this.date,
+    required this.recorderInput,
+    required this.fullName,
   });
 
   Map<String, dynamic> toJson() => {
@@ -23,6 +29,8 @@ class PostData {
     'status': status,
     'emoji': emoji,
     'date': date,
+    'recorderInput': jsonEncode(recorderInput),
+    'fullName': fullName,
   };
 
 }

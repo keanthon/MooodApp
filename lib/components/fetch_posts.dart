@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moood/components/post_card.dart';
 import 'package:moood/models/post.dart';
 
+import '../utils/colors_styles.dart';
+
 class FetchPosts extends StatefulWidget {
   final String uid;
   const FetchPosts({Key? key, required this.uid}) : super(key: key);
@@ -33,7 +35,7 @@ class _FetchPostsState extends State<FetchPosts> {
       stream: posts.stream,
       builder: (BuildContext _context, AsyncSnapshot _snapshot) {
         if (!_snapshot.hasData) {
-          return Center(child: Text('Much Lonely, Add Friends'));
+          return const Center(child: Text('Much Lonely, Add Friends', style: TextStyle(color: secondaryColor)));
         } else {
           return RefreshIndicator(
             onRefresh: posts.refresh,
@@ -53,9 +55,9 @@ class _FetchPostsState extends State<FetchPosts> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else {
-                  return Padding(
+                  return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: Center(child: Text('nothing more to load!')),
+                    child: Center(child: Text('Much Lonely, Add Friends', style: TextStyle(color: secondaryColor))),
                   );
                 }
               },
