@@ -51,6 +51,12 @@ class _PostCardState extends State<PostCard> {
   }
 
   @override
+  void dispose() {
+    _playerStatus?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (!parsedRecording) {
       setState(() {

@@ -41,12 +41,14 @@ class _NewPostState extends State<NewPost> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (_totalRecording == 0) {
-          stopRecording();
-        } else {
-          setState(() {
-            _totalRecording--;
-          });
+        if (mounted) {
+          if (_totalRecording == 0) {
+            stopRecording();
+          } else {
+            setState(() {
+              _totalRecording--;
+            });
+          }
         }
       },
     );
@@ -82,6 +84,12 @@ class _NewPostState extends State<NewPost> {
   void initState() {
     super.initState();
     initializeRecorder();
+  }
+
+  @override
+  void dispose() {
+    _recorderStatus.cancel();
+    super.dispose();
   }
 
   @override
