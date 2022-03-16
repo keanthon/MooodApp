@@ -15,7 +15,7 @@ class AuthMethods {
   Future<UserClass> getUserDetails() async {
     User currentUser = _auth.currentUser!;
     DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
-
+    print(snap.data());
     return UserClass.fromSnap(snap);
   }
 
@@ -51,12 +51,12 @@ class AuthMethods {
             email: email,
             bio: '',
             friends: [],
-            posts: [],
         );
 
         _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
 
         res = "success";
+        print(res);
       }
     } catch(err) {
       res = err.toString();
@@ -97,18 +97,31 @@ class AuthMethods {
     String res = "Error";
 
     try {
+
+      List<WriteBatch> batchArray = [];
+      batchArray.add(_firestore.batch());
+      int operationCount =0, batchIndex = 0;
+
       // put in my posts
-      await _firestore.collection("users").doc(uid).update({
-        'posts': FieldValue.arrayUnion([pos])
-      });
+      var ref = _firestore.collection("userfeed").doc(uid).collection("posts").doc();
+      batchArray[batchIndex].set(ref, pos);
 
-      // put in my
-      // put in my friends feed
+      // put in my friends feed using batch array
       for(var friend in friends) {
-
-        await _firestore.collection("userfeeds").doc(friend["UID"]).collection("feed").add(pos);
-
+        ref = _firestore.collection("userfeed").doc(friend["UID"]).collection("feed").doc();
+        batchArray[batchIndex].set(ref, pos);
+        operationCount++;
+        if(operationCount==490) {
+          batchArray.add(_firestore.batch());
+          batchIndex++;
+          operationCount = 0;
+        }
       }
+
+      for(var b in batchArray) {
+        await b.commit();
+      }
+
       res = "success";
     } catch(err) {
       res = err.toString();

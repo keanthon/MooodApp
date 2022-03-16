@@ -223,9 +223,14 @@ class _NewPostState extends State<NewPost> {
               ),
               Material(
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    // refresh to get the latest friend list
+                    await Provider.of<UserProvider>(context, listen: false).refreshUser();
+                    user = Provider.of<UserProvider>(context, listen: false).getUser;
+                    print("in inkwell post button");
+
                     AuthMethods().sendPost(
-                        uid: user.uid,
+                        uid: user!.uid,
                         status: statusController.text,
                         emoji: _emoji,
                         friends: user.friends,
