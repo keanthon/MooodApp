@@ -106,10 +106,14 @@ class AuthMethods {
       var ref = _firestore.collection("userfeed").doc(uid).collection("posts").doc();
       batchArray[batchIndex].set(ref, pos);
 
+      // put in my feed
+      ref = _firestore.collection("userfeed").doc(uid).collection("feed").doc(ref.id);
+      batchArray[batchIndex].set(ref, pos);
+
       // put in my friends feed using batch array
       for(var friend in friends) {
-        ref = _firestore.collection("userfeed").doc(friend["UID"]).collection("feed").doc();
-        batchArray[batchIndex].set(ref, pos);
+        var friendRef = _firestore.collection("userfeed").doc(friend["UID"]).collection("feed").doc(ref.id);
+        batchArray[batchIndex].set(friendRef, pos);
         operationCount++;
         if(operationCount==490) {
           batchArray.add(_firestore.batch());
