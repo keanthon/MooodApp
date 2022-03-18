@@ -25,8 +25,6 @@ class StreamInterface extends StatefulWidget {
 }
 
 class StreamInterfaceState extends State<StreamInterface> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
@@ -61,16 +59,6 @@ class StreamInterfaceState extends State<StreamInterface> {
                   goToPage(FriendRequests(user: user!), 2, context);
                 },
               ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 16),
-              //   child: IconButton(
-              //     icon: const Icon(Icons.account_circle,
-              //         color: primaryColor, size: 30),
-              //     onPressed: () {
-              //       goToPage(Profile(), 2, context);
-              //     },
-              //   ),
-              // ),
             ],
           ),
         ],

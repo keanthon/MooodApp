@@ -77,7 +77,7 @@ class FriendRequestsState extends State<FriendRequests> {
     var snapshot = await _firestore.collection("userfeed").doc(user.uid).collection("posts").get();
     if(snapshot.docs.isNotEmpty) {
       for (var post in snapshot.docs) {
-        ref = _firestore.collection("userfeed").doc(req["UID"]).collection("feed").doc();
+        ref = _firestore.collection("userfeed").doc(req["UID"]).collection("feed").doc(post.id);
         batchArray[batchIndex].set(ref, post.data());
         operationCount++;
         if (operationCount > 490) {
@@ -92,7 +92,7 @@ class FriendRequestsState extends State<FriendRequests> {
     snapshot = await _firestore.collection("userfeed").doc(req["UID"]).collection("posts").get();
     if(snapshot.docs.isNotEmpty) {
       for (var post in snapshot.docs) {
-        ref = _firestore.collection("userfeed").doc(user.uid).collection("feed").doc();
+        ref = _firestore.collection("userfeed").doc(user.uid).collection("feed").doc(post.id);
         batchArray[batchIndex].set(ref, post.data());
         operationCount++;
         if (operationCount > 490) {

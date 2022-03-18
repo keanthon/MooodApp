@@ -47,7 +47,7 @@ class Profile extends StatelessWidget {
                   ),
                   Text(
 
-                      "Hi ${user!.firstName} ${user!.lastName}!\n#${getShortUID(user!.uid)}",
+                      "Hi ${user!.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
                       style: TextStyle(
                         fontSize: 24,
                         color: secondaryColor,
@@ -94,7 +94,7 @@ class Profile extends StatelessWidget {
                       color: secondaryColor,
                     )
                   ),
-                  displayFriends(castIntoListMap(user!.friends)),
+                  displayFriends(castIntoListMap(user.friends)),
                   ElevatedButton(
                     child: Text("Sign Out"),
                     onPressed: () async {
