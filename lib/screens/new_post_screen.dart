@@ -131,10 +131,7 @@ class _NewPostState extends State<NewPost> {
                                           backgroundImage: AssetImage("assets/images/${j}.png"),
                                         ),
                                         onTap: (){
-                                          setState(() {
-                                            select1 = true; select2=false; select3=false; select4=false; select5=false;
-                                          });
-                                          _emoji = "i";
+                                          _emoji = i.toString();
                                         },
                                       ),
                                   ],
