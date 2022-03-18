@@ -15,8 +15,8 @@ class PostCard extends StatefulWidget {
   final postID;
   const PostCard({Key? key,
     required this.snap,
-    required this.recorderInput,
-    required this.postID,}) : super(key: key);
+    this.recorderInput = const [],
+    this.postID,}) : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -93,15 +93,21 @@ class _PostCardState extends State<PostCard> {
                   },
                 ),
               ),
-              IconButton(
-                iconSize: 24.0,
-                icon: const Icon(Icons.chat_bubble),
-                onPressed: () => goToPage(
-                    Comments(
-                    recorderInput: widget.recorderInput,
-                    snap: widget.snap,
-                    postID: widget.postID,),
-                    2, context),
+              Visibility(
+                visible: widget.postID != null,
+                maintainSize: true,
+                maintainState: true,
+                maintainAnimation: true,
+                child: IconButton(
+                  iconSize: 24.0,
+                  icon: const Icon(Icons.chat_bubble),
+                  onPressed: () => goToPage(
+                      Comments(
+                      recorderInput: widget.recorderInput,
+                      snap: widget.snap,
+                      postID: widget.postID,),
+                      2, context),
+                ),
               ),
             ]
           ),
