@@ -17,8 +17,8 @@ class MyPosts extends StatefulWidget {
 
 class _MyPostsState extends State<MyPosts> {
   final tab = TabBar(tabs: <Tab>[
-    Tab(icon: Icon(Icons.calendar_month)),
     Tab(icon: Icon(Icons.list_alt)),
+    Tab(icon: Icon(Icons.calendar_month)),
   ]);
 
   @override
@@ -33,11 +33,11 @@ class _MyPostsState extends State<MyPosts> {
           ),
           body: TabBarView(
             children: [
-              CalendarScreen(),
               FetchPosts(
-              uid: user!.uid,
-              feedOrPost: "posts",
+                uid: user!.uid,
+                feedOrPost: "posts",
               ),
+              CalendarScreen(uid: user!.uid,),
             ],
           ),
         ),

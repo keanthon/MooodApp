@@ -26,6 +26,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
     UserProvider _userProvider =
     Provider.of<UserProvider>(context, listen: false);
     await _userProvider.refreshUser();
+    await _userProvider.refreshLastPost();
   }
 
   @override

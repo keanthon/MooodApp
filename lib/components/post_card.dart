@@ -8,8 +8,7 @@ import 'package:sound_stream/sound_stream.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
-  final List<Uint8List> recorderInput;
-  const PostCard({Key? key, required this.snap, required this.recorderInput}) : super(key: key);
+  const PostCard({Key? key, required this.snap}) : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -17,24 +16,29 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   final PlayerStream _player = PlayerStream();
+  late List<Uint8List> recorderInput;
   bool currentlyPlaying = false;
   bool parsedRecording = false;
+
+  @override
+  void initState() {
+    super.initState();
+    recorderInput = (jsonDecode(widget.snap["recorderInput"]) as List).map((e) {
+      return Uint8List.fromList(e.cast<int>());
+    }).toList();
+    _player.initialize();
+  }
 
   void _play() async {
     await _player.start();
 
-    if (widget.recorderInput.isNotEmpty) {
-      for (var chunk in widget.recorderInput) {
+    if (recorderInput.isNotEmpty) {
+      for (var chunk in recorderInput) {
         await _player.writeChunk(chunk);
       }
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _player.initialize();
-  }
 
   @override
   Widget build(BuildContext context) {
