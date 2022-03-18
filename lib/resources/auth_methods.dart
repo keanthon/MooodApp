@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:moood/models/post.dart';
 import 'package:moood/models/user_class.dart';
+import 'package:provider/provider.dart';
+import '../providers/user_provider.dart';
 import '../utils/helper_functions.dart';
 
 // Firebase Authentication Methods
@@ -91,6 +93,7 @@ class AuthMethods {
     required List friends,
     required List<Uint8List> recorderInput,
     required String fullName,
+    required BuildContext context,
   }) async {
     var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now(),
                       recorderInput: recorderInput, fullName: fullName).toJson();
@@ -105,7 +108,7 @@ class AuthMethods {
       // put in my posts
       var ref = _firestore.collection("userfeed").doc(uid).collection("posts").doc();
       batchArray[batchIndex].set(ref, pos);
-
+      
       // put in my feed
       ref = _firestore.collection("userfeed").doc(uid).collection("feed").doc(ref.id);
       batchArray[batchIndex].set(ref, pos);
@@ -125,15 +128,30 @@ class AuthMethods {
       for(var b in batchArray) {
         await b.commit();
       }
-
       res = "success";
     } catch(err) {
       res = err.toString();
+    }
+
+    if(res=="success") {
+      Provider.of<UserProvider>(context, listen: false).setLastPost(pos);
     }
     return res;
   }
 
   Future<void> signOut() async {
     _auth.signOut();
+  }
+
+  Future<Map<String, dynamic>> lastPost(uid) async {
+    var snapshot =  await
+        _firestore
+        .collection('userfeed')
+        .doc(uid)
+        .collection("posts")
+        .orderBy('date', descending: true)
+        .limit(1).get();
+
+    return snapshot.docs[0].data();
   }
 }
