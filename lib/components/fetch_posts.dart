@@ -58,10 +58,10 @@ class _FetchPostsState extends State<FetchPosts> with AutomaticKeepAliveClientMi
               itemBuilder: (BuildContext _context, int index) {
                 if (index < _snapshot.data.length) {
                   dynamic _snapData = _snapshot.data[index].data();
-                  // List<Uint8List> recorderInput = (jsonDecode(_snapData["recorderInput"]) as List).map((e) {
-                  //   return Uint8List.fromList(e.cast<int>());
-                  // }).toList();
-                  return PostCard(snap: _snapData);
+                  List<Uint8List> recorderInput = (jsonDecode(_snapData["recorderInput"]) as List).map((e) {
+                    return Uint8List.fromList(e.cast<int>());
+                  }).toList();
+                  return PostCard(snap: _snapData, recorderInput: recorderInput, postID: _snapshot.data[index].id);
                 } else if (posts.hasMore) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 32.0),
