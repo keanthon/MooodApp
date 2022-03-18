@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moood/components/post_card.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/utils/globals.dart';
 import 'package:moood/screens/login_screen.dart';
@@ -54,7 +55,6 @@ class Profile extends StatelessWidget {
                       )
                   ),
                   Container(
-                    height: 150,
                     width: 450,
                     decoration: const BoxDecoration(
                         color: secondaryColor,
@@ -72,14 +72,18 @@ class Profile extends StatelessWidget {
                                 color: primaryColor,
                               )
                           ),
+
+                          Provider.of<UserProvider>(context).getLastPost!=null ?
+                          PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
                           Text(
-                              //FIXME change to latest post
+                            //FIXME change to latest post
                               "Hello",
                               style: TextStyle(
                                 fontSize: 24,
                                 color: primaryColor,
                               )
                           ),
+
                           IconButton(
                               onPressed: () { goToPage( MyPosts(), 2, context);},
                               icon: Icon(Icons.arrow_forward)

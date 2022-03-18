@@ -232,16 +232,18 @@ class _NewPostState extends State<NewPost> {
                     user = Provider.of<UserProvider>(context, listen: false).getUser;
                     print("in inkwell post button");
 
-                    AuthMethods().sendPost(
+                    String res = await AuthMethods().sendPost(
                         uid: user!.uid,
                         status: statusController.text,
                         emoji: _emoji,
                         friends: user!.friends,
                         recorderInput: recorderInput,
                         fullName: user!.fullName,
+                        context: context,
                     );
-                    Navigator.pop(context);
 
+                    Navigator.pop(context);
+                    
                   },
                   splashColor: secondaryColor,
                   child: Container(
