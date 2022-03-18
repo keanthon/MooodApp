@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    for (var i = 1; i <= 20; ++i) {
+      precacheImage(AssetImage("assets/images/${i}.png"), context);
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -31,6 +34,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),
+        // theme: ThemeData(
+        //     scaffoldBackgroundColor: mobileBackgroundColor,
+        //     fontFamily: "Montserrat",
+        // ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

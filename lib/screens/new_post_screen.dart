@@ -118,51 +118,74 @@ class _NewPostState extends State<NewPost> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        InkWell(
-                          child: redCenteredContainer("😀", select1),
-                          onTap: (){
-                            setState(() {
-                              select1 = true; select2=false; select3=false; select4=false; select5=false;
-                            });
-                            _emoji = "😀";
-                          },
+                        Column(
+                            children: [
+                              for (var i = 0; i < 4; ++i)
+                                Row(
+                                  children: [
+                                    for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
+                                      InkWell(
+                                        child: CircleAvatar(
+                                          maxRadius: 45,
+                                          backgroundColor: Colors.transparent,
+                                          backgroundImage: AssetImage("assets/images/${j}.png"),
+                                        ),
+                                        onTap: (){
+                                          setState(() {
+                                            select1 = true; select2=false; select3=false; select4=false; select5=false;
+                                          });
+                                          _emoji = "i";
+                                        },
+                                      ),
+                                  ],
+                                )
+                            ]
                         ),
-                        InkWell(
-                          child: redCenteredContainer("😔", select2),
-                          onTap: (){
-                            setState(() {
-                              select1 = false; select2=true; select3=false; select4=false; select5=false;
-                            });
-                            _emoji = "😔";
-                          },
-                        ),
-                        InkWell(
-                          child: redCenteredContainer("😂", select3),
-                          onTap: (){
-                            setState(() {
-                              select1 = false; select2=false; select3=true; select4=false; select5=false;
-                            });
-                            _emoji = "😂";
-                          },
-                        ),
-                        InkWell(
-                          child: redCenteredContainer("😭", select4),
-                          onTap: (){
-                            setState(() {
-                              select1 = false; select2=false; select3=false; select4=true; select5=false;
-                            });
-                            _emoji = "😭";
-                          },
-                        ),
-                        InkWell(
-                          child: redCenteredContainer("🥰", select5),
-                          onTap: (){
-                            setState(() {
-                              select1 = false; select2=false; select3=false; select4=false; select5=true;
-                            });
-                            _emoji = "🥰";
-                          },
-                        ),
+                        // InkWell(
+                        //   child: redCenteredContainer("😀", select1),
+                        //   onTap: (){
+                        //     setState(() {
+                        //       select1 = true; select2=false; select3=false; select4=false; select5=false;
+                        //     });
+                        //     _emoji = "😀";
+                        //   },
+                        // ),
+                        // InkWell(
+                        //   child: redCenteredContainer("😔", select2),
+                        //   onTap: (){
+                        //     setState(() {
+                        //       select1 = false; select2=true; select3=false; select4=false; select5=false;
+                        //     });
+                        //     _emoji = "😔";
+                        //   },
+                        // ),
+                        // InkWell(
+                        //   child: redCenteredContainer("😂", select3),
+                        //   onTap: (){
+                        //     setState(() {
+                        //       select1 = false; select2=false; select3=true; select4=false; select5=false;
+                        //     });
+                        //     _emoji = "😂";
+                        //   },
+                        // ),
+                        // InkWell(
+                        //   child: redCenteredContainer("😭", select4),
+                        //   onTap: (){
+                        //     setState(() {
+                        //       select1 = false; select2=false; select3=false; select4=true; select5=false;
+                        //     });
+                        //     _emoji = "😭";
+                        //   },
+                        // ),
+                        // InkWell(
+                        //   child: redCenteredContainer("🥰", select5),
+                        //   onTap: (){
+                        //     setState(() {
+                        //       select1 = false; select2=false; select3=false; select4=false; select5=true;
+                        //     });
+                        //     _emoji = "🥰";
+                        //   },
+                        // ),
 
                       ])),
               GestureDetector(
@@ -243,7 +266,7 @@ class _NewPostState extends State<NewPost> {
                     );
 
                     Navigator.pop(context);
-                    
+
                   },
                   splashColor: secondaryColor,
                   child: Container(

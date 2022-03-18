@@ -5,6 +5,7 @@ import 'package:moood/responsive/responsive_layout.dart';
 import 'package:moood/screens/stream_interface.dart';
 import 'package:moood/utils/input_decoration.dart';
 
+import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -87,8 +88,6 @@ class _SignupScreenState extends State<SignupScreen> {
               key: _formKey,
               child: Column(
                 children: [
-
-
                   TextFormField(
                     validator: requireFunc,
                     controller: _firstName,
@@ -157,8 +156,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurpleAccent[100],
+                        primary: pink,
                         fixedSize: Size(300, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
                       ),
                       onPressed: () async {
                         signUpUser(context);
