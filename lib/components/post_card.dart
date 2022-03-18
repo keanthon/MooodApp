@@ -35,13 +35,12 @@ class _PostCardState extends State<PostCard> {
       }
     }
   }
-  
+
   @override
   void initState() {
     super.initState();
     _player.initialize();
   }
-
 
   @override
   Widget build(BuildContext context) {
