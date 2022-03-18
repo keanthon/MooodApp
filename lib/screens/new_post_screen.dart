@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../models/user_class.dart';
 import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
+import '../utils/globals.dart';
 import '../utils/helper_functions.dart';
 import '../utils/input_decoration.dart';
 import 'package:sound_stream/sound_stream.dart';
@@ -21,7 +22,6 @@ class NewPost extends StatefulWidget {
 class _NewPostState extends State<NewPost> {
   final TextEditingController statusController = TextEditingController();
   String _emoji="";
-  final maxStatusCount = 20;
   bool select1=false, select2=false, select3=false, select4=false, select5=false;
   List<String> userStatuses = [];
 
