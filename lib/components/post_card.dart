@@ -24,26 +24,22 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   final PlayerStream _player = PlayerStream();
-  late List<Uint8List> recorderInput;
   bool currentlyPlaying = false;
-
-  @override
-  void initState() {
-    super.initState();
-    recorderInput = (jsonDecode(widget.snap["recorderInput"]) as List).map((e) {
-      return Uint8List.fromList(e.cast<int>());
-    }).toList();
-    _player.initialize();
-  }
 
   void _play() async {
     await _player.start();
 
-    if (recorderInput.isNotEmpty) {
-      for (var chunk in recorderInput) {
+    if (widget.recorderInput.isNotEmpty) {
+      for (var chunk in widget.recorderInput) {
         await _player.writeChunk(chunk);
       }
     }
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+    _player.initialize();
   }
 
 
