@@ -8,6 +8,7 @@ import 'package:moood/responsive/responsive_layout.dart';
 import 'package:moood/responsive/web_layout.dart';
 import 'package:moood/screens/stream_interface.dart';
 import 'package:moood/utils/input_decoration.dart';
+import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
 import 'signup_screen.dart';
 
@@ -69,12 +70,16 @@ class MyCustomFormState extends State<MyCustomForm> {
       key: _formKey,
       child: Column(
         children: [
-
-          CircleAvatar(
-            radius: 100,
-            backgroundImage: AssetImage('assets/images/logo.jpg'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                width: 400,
+                height: 400,
+              ),
+            ],
           ),
-          const SizedBox(height: 64,),
 
           TextFormField(
             validator: requireFunc,
@@ -100,8 +105,11 @@ class MyCustomFormState extends State<MyCustomForm> {
 
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.deepPurpleAccent[100],
+                primary: pink,
                 fixedSize: Size(300, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100.0),
+                ),
               ),
               onPressed: () async {
                 // FIXME cache login status so don't have to re-login
@@ -116,7 +124,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   color: Colors.white,
                 ),
               )
-              : const Text('Submit')
+                  : const Text('Submit')
           ),
 
           Row(
@@ -184,5 +192,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
