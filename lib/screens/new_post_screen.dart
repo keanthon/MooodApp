@@ -128,7 +128,7 @@ class _NewPostState extends State<NewPost> {
                                       borderRadius: const BorderRadius.all(Radius.circular(40)),
                                       border: Border.all(
                                         width: 3,
-                                        color: _emoji == j.toString() ? red : Colors.transparent,
+                                        color: _emoji == "assets/images/${j.toString()}.png" ? red : Colors.transparent,
                                         style: BorderStyle.solid,
                                       ),
                                     ),
@@ -138,11 +138,10 @@ class _NewPostState extends State<NewPost> {
                                       splashColor: pink,
                                       onPressed: () {
                                         setState(() {
-                                          _emoji = j.toString();
+                                          _emoji = "assets/images/${j.toString()}.png";
                                         });
                                       },
                                       splashRadius: 50,
-                                      disabledColor: Colors.black,
                                     ),
                                   ),
                               ],
@@ -167,65 +166,10 @@ class _NewPostState extends State<NewPost> {
                   label: alreadyRecorded ? const Text("Re-record audio!") : const Text("Hold to record audio!"),
                   icon: const Icon(Icons.mic),
                   style: ElevatedButton.styleFrom(
-                    primary: alreadyRecorded ? secondaryColor : blueColor,
+                    primary: alreadyRecorded ? secondaryColor : michiganBlue,
                   ),
-                ),
-                const Text("Hi! How's it hanging?",
-                    style: TextStyle(
-                      color: secondaryColor,
-                      fontSize: 24,
-                    )),
-                // these are suggested statuses
-                Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    margin: EdgeInsets.all(5),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Column(
-                              children: [
-                                for (var i = 0; i < 4; ++i)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
-                                        IconButton(
-                                          icon: Image.asset("assets/images/$j.png"),
-                                          iconSize: 50,
-                                          splashColor: pink,
-                                          onPressed: () {
-                                            _emoji = "assets/images/$j.png";
-                                          },
-                                          splashRadius: 50,
-                                          color: Colors.black,
-                                        ),
-                                    ],
-                                  )
-                              ]
-                          ),
-                        ])),
-                GestureDetector(
-                  onLongPressStart: (_) async {
-                    recorderInput.clear();
-                    _recorder.start();
-                    setState(() {
-                      startTimer();
-                      _counterVisible = true;
-                    });
-                  },
-                  onLongPressEnd: (_) {
-                    stopRecording();
-                  },
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    label: alreadyRecorded ? const Text("Re-record audio!") : const Text("Hold to record audio!"),
-                    icon: const Icon(Icons.mic),
-                    style: ElevatedButton.styleFrom(
-                      primary: alreadyRecorded ? secondaryColor : michiganBlue,
-                    ),
-                  ),
-                ),
+                )
+              ),
                 Visibility(
                   visible: _counterVisible,
                   child: Padding(
@@ -258,38 +202,9 @@ class _NewPostState extends State<NewPost> {
                                 " characters left!!",
                             style: TextStyle(color: secondaryColor, fontSize: 18),
                           ),
+                        )
+                  )
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
-                child: TextFormField(
-                  validator: requireFunc,
-                  controller: statusController,
-                  keyboardType: TextInputType.text,
-                  obscureText: false,
-                  maxLength: maxStatusCount,
-                  onTap: () {
-                    sc.animateTo(
-                      sc.position.minScrollExtent,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  buildCounter: (_,
-                      {required currentLength,
-                        maxLength,
-                        required isFocused}) =>
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Text(
-                          (maxLength! - currentLength).toString() +
-                              " characters left!!",
-                          style: TextStyle(color: secondaryColor, fontSize: 18),
-                        ),
-                    decoration: TextInputDecoration(
-                        '... What a mood', Colors.redAccent[100])
-                        .decorate(),
-                  ),
-                ),
                 Material(
                   child: InkWell(
                     onTap: () async {
@@ -321,12 +236,11 @@ class _NewPostState extends State<NewPost> {
                     ),
                   ),
                 ),
-              ],
+              ]
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
