@@ -39,14 +39,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: mobileBackgroundColor,
             fontFamily: "Montserrat",
-            appBarTheme: AppBarTheme(
+            appBarTheme: const AppBarTheme(
               toolbarHeight: 75,
               backgroundColor: appBarColor,
               iconTheme: IconThemeData(color: Colors.black),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(30),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(30)),
               ),
             ),
 
