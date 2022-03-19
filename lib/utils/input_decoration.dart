@@ -17,7 +17,7 @@ class TextInputDecoration {
     );
 
     return InputDecoration(
-      fillColor: red,
+      fillColor: inputDecColor,
       hintText: hintText,
       hintStyle: const TextStyle(fontWeight: FontWeight.bold),
       border: inputBorder,

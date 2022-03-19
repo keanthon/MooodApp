@@ -101,6 +101,7 @@ class _NewPostState extends State<NewPost> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
+          reverse: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -169,19 +170,94 @@ class _NewPostState extends State<NewPost> {
                     primary: alreadyRecorded ? secondaryColor : blueColor,
                   ),
                 ),
-              ),
-              Visibility(
-                visible: _counterVisible,
-                child: Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Text(
-                    _totalRecording.toString(),
-                    style: const TextStyle(
+                const Text("Hi! How's it hanging?",
+                    style: TextStyle(
                       color: secondaryColor,
-                      fontSize: 60,
-                    )
+                      fontSize: 24,
+                    )),
+                // these are suggested statuses
+                Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    margin: EdgeInsets.all(5),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Column(
+                              children: [
+                                for (var i = 0; i < 4; ++i)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
+                                        IconButton(
+                                          icon: Image.asset("assets/images/$j.png"),
+                                          iconSize: 50,
+                                          splashColor: pink,
+                                          onPressed: () {
+                                            _emoji = "assets/images/$j.png";
+                                          },
+                                          splashRadius: 50,
+                                          color: Colors.black,
+                                        ),
+                                    ],
+                                  )
+                              ]
+                          ),
+                        ])),
+                GestureDetector(
+                  onLongPressStart: (_) async {
+                    recorderInput.clear();
+                    _recorder.start();
+                    setState(() {
+                      startTimer();
+                      _counterVisible = true;
+                    });
+                  },
+                  onLongPressEnd: (_) {
+                    stopRecording();
+                  },
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    label: alreadyRecorded ? const Text("Re-record audio!") : const Text("Hold to record audio!"),
+                    icon: const Icon(Icons.mic),
+                    style: ElevatedButton.styleFrom(
+                      primary: alreadyRecorded ? secondaryColor : michiganBlue,
+                    ),
                   ),
                 ),
+                Visibility(
+                  visible: _counterVisible,
+                  child: Padding(
+                    padding: const EdgeInsets.all(25),
+                    child: Text(
+                      _totalRecording.toString(),
+                      style: const TextStyle(
+                        color: secondaryColor,
+                        fontSize: 60,
+                      )
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
+                  child: TextFormField(
+                    validator: requireFunc,
+                    controller: statusController,
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    maxLength: maxStatusCount,
+                    buildCounter: (_,
+                        {required currentLength,
+                          maxLength,
+                          required isFocused}) =>
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Text(
+                            (maxLength! - currentLength).toString() +
+                                " characters left!!",
+                            style: TextStyle(color: secondaryColor, fontSize: 18),
+                          ),
               ),
               Container(
                 margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
@@ -209,47 +285,48 @@ class _NewPostState extends State<NewPost> {
                               " characters left!!",
                           style: TextStyle(color: secondaryColor, fontSize: 18),
                         ),
-                      ),
-                  decoration: TextInputDecoration(
-                      '... What a mood', Colors.redAccent[100])
-                      .decorate(),
+                    decoration: TextInputDecoration(
+                        '... What a mood', Colors.redAccent[100])
+                        .decorate(),
+                  ),
                 ),
-              ),
-              Material(
-                child: InkWell(
-                  onTap: () async {
-                    // refresh to get the latest friend list
-                    await Provider.of<UserProvider>(context, listen: false).refreshUser();
-                    user = Provider.of<UserProvider>(context, listen: false).getUser;
-                    print("in inkwell post button");
+                Material(
+                  child: InkWell(
+                    onTap: () async {
+                      // refresh to get the latest friend list
+                      await Provider.of<UserProvider>(context, listen: false).refreshUser();
+                      user = Provider.of<UserProvider>(context, listen: false).getUser;
+                      print("in inkwell post button");
 
-                    String res = await AuthMethods().sendPost(
-                        uid: user!.uid,
-                        status: statusController.text,
-                        emoji: _emoji,
-                        friends: user!.friends,
-                        recorderInput: recorderInput,
-                        fullName: user!.fullName,
-                        context: context,
-                    );
+                      String res = await AuthMethods().sendPost(
+                          uid: user!.uid,
+                          status: statusController.text,
+                          emoji: _emoji,
+                          friends: user!.friends,
+                          recorderInput: recorderInput,
+                          fullName: user!.fullName,
+                          context: context,
+                      );
 
-                    Navigator.pop(context);
+                      Navigator.pop(context);
 
-                  },
-                  splashColor: secondaryColor,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: const Text(
-                      "Post",
-                      style: TextStyle(fontSize: 18),
+                    },
+                    splashColor: secondaryColor,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+

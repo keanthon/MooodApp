@@ -40,13 +40,13 @@ class StreamInterfaceState extends State<StreamInterface> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        // backgroundColor: secondaryColor,
         centerTitle: true,
-        title: Row(
+        title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("App", style: TextStyle(color: primaryColor)),
+            Image.asset("assets/images/logoAppBar.png"),
           ],
         ),
         leading: Builder(
