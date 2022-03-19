@@ -18,7 +18,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
-    return Scaffold(
+    return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
       appBar: AppBar(
         backgroundColor: secondaryColor,
         centerTitle: true,
@@ -48,7 +48,7 @@ class Profile extends StatelessWidget {
                   ),
                   Text(
 
-                      "Hi ${user!.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
+                      "Hi ${user.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
                       style: TextStyle(
                         fontSize: 24,
                         color: secondaryColor,
@@ -109,7 +109,7 @@ class Profile extends StatelessWidget {
                 ]
             ),
           ),
-        )
+        ),
     );
   }
 }
