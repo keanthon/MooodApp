@@ -20,9 +20,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    for (var i = 1; i <= 20; ++i) {
-      precacheImage(AssetImage("assets/images/${i}.png"), context);
-    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
