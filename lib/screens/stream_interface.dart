@@ -42,13 +42,13 @@ class StreamInterfaceState extends State<StreamInterface> {
       appBar: AppBar(
         // backgroundColor: secondaryColor,
         centerTitle: true,
-        // title: Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   mainAxisSize: MainAxisSize.min,
-        //   children: <Widget>[
-        //     Image.asset("assets/images/logoAppBar.png"),
-        //   ],
-        // ),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image.asset("assets/images/logoAppBar.png"),
+          ],
+        ),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
