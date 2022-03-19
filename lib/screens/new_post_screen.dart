@@ -134,7 +134,7 @@ class _NewPostState extends State<NewPost> {
                                     ),
                                     child: IconButton(
                                       icon: Image.asset("assets/images/$j.png"),
-                                      iconSize: 70,
+                                      iconSize: 50,
                                       splashColor: pink,
                                       onPressed: () {
                                         setState(() {
