@@ -18,6 +18,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  TextStyle boldText() {
+    return TextStyle(
+        fontWeight: FontWeight.bold
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -28,13 +33,31 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Moood',
-        theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: mobileBackgroundColor,
-        ),
-        // theme: ThemeData(
-        //     scaffoldBackgroundColor: mobileBackgroundColor,
-        //     fontFamily: "Montserrat",
+        // theme: ThemeData.dark().copyWith(
+        //   scaffoldBackgroundColor: mobileBackgroundColor,
         // ),
+        theme: ThemeData(
+            scaffoldBackgroundColor: mobileBackgroundColor,
+            fontFamily: "Montserrat",
+            appBarTheme: AppBarTheme(
+              toolbarHeight: 75,
+              backgroundColor: appBarColor,
+              iconTheme: IconThemeData(color: Colors.black),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
+              ),
+            ),
+
+            textTheme: TextTheme(
+              bodyText2: boldText(),
+              bodyText1: boldText(),
+              button: boldText(),
+
+            ),
+
+        ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

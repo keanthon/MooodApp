@@ -70,16 +70,11 @@ class MyCustomFormState extends State<MyCustomForm> {
       key: _formKey,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 400,
-                height: 400,
-              ),
-            ],
+          Image.asset(
+            'assets/images/logo.png',
+            scale: 1.5,
           ),
+
 
           TextFormField(
             validator: requireFunc,
@@ -105,8 +100,8 @@ class MyCustomFormState extends State<MyCustomForm> {
 
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: pink,
-                fixedSize: Size(300, 50),
+                primary: michiganBlue,
+                fixedSize: Size(200, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                 ),
@@ -180,6 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Color(0xFFF1F0F2),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
