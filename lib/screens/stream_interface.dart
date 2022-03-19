@@ -29,7 +29,7 @@ class StreamInterfaceState extends State<StreamInterface> {
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
 
-    return Scaffold(
+    return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
       appBar: AppBar(
         backgroundColor: secondaryColor,
         centerTitle: true,
@@ -45,7 +45,7 @@ class StreamInterfaceState extends State<StreamInterface> {
             return IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                goToPage(Search(user: user!), 2, context);
+                goToPage(Search(user: user), 2, context);
               },
             );
           },
@@ -56,14 +56,14 @@ class StreamInterfaceState extends State<StreamInterface> {
               IconButton(
                 icon: const Icon(Icons.group, color: primaryColor, size: 30),
                 onPressed: () {
-                  goToPage(FriendRequests(user: user!), 2, context);
+                  goToPage(FriendRequests(user: user), 2, context);
                 },
               ),
             ],
           ),
         ],
       ),
-      body: FetchPosts(uid: user!.uid, feedOrPost: 'feed',),
+      body: FetchPosts(uid: user.uid, feedOrPost: 'feed',),
     );
   }
 }
