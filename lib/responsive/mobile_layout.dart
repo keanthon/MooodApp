@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/providers/user_provider.dart';
+import 'package:moood/screens/calendar_screen.dart';
 import 'package:moood/screens/profile.dart';
 import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/utils/helper_functions.dart';
@@ -30,6 +31,7 @@ class _MobileLayoutState extends State<MobileLayout> {
   List<Widget> _screens = [
     StreamInterface(),
     Profile(),
+    // CalendarScreen(),
   ];
 
   @override

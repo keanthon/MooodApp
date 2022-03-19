@@ -79,6 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Color(0xFFF1F0F2),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -156,8 +157,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: pink,
-                        fixedSize: Size(300, 50),
+                        primary: michiganBlue,
+                        fixedSize: Size(200, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100.0),
                         ),

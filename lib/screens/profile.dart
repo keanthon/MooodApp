@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moood/components/post_card.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/utils/globals.dart';
 import 'package:moood/screens/login_screen.dart';
@@ -17,95 +18,98 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: secondaryColor,
-          centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                  "Your profile",
-                  style: TextStyle(
-                      color: primaryColor
-                  )
-              ),
-            ],
+    return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+                "Your profile",
+                style: TextStyle(
+                    color: primaryColor
+                )
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column (
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // FIXME need custom profile pic
+                CircleAvatar(
+                  radius: 100,
+                  backgroundImage: AssetImage('assets/images/logo.png'),
+                ),
+                Text(
+
+                    "Hi ${user.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: secondaryColor,
+                    )
+                ),
+                Container(
+                  width: 450,
+                  // decoration: const BoxDecoration(
+                  //     color: secondaryColor,
+                  //     borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  child: Column (
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                      ),
+                      Text(
+                          "Your status",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
+                          )
+                      ),
+
+                      Provider.of<UserProvider>(context).getLastPost!=null ?
+                      PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
+                      Text(
+                        //FIXME change to latest post
+                          "Hello",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: primaryColor,
+                          )
+                      ),
+
+                      IconButton(
+                          onPressed: () { goToPage( MyPosts(), 2, context);},
+                          icon: Icon(Icons.arrow_forward)
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                    "Your friends",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                    )
+                ),
+                displayFriends(castIntoListMap(user.friends)),
+                ElevatedButton(
+                  child: Text("Sign Out"),
+                  onPressed: () async {
+                    AuthMethods().signOut();
+                    goToPage(LoginScreen(), 3, context);
+                  },
+                ),
+              ]
           ),
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column (
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // FIXME need custom profile pic
-                  CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('assets/images/1.png'),
-                  ),
-                  Text(
-
-                      "Hi ${user!.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: secondaryColor,
-                      )
-                  ),
-                  Container(
-                    height: 150,
-                    width: 450,
-                    decoration: const BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: Column (
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                        ),
-                        Text(
-                            "Your status",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: primaryColor,
-                            )
-                        ),
-                        Text(
-                          //FIXME change to latest post
-                            "Hello",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: primaryColor,
-                            )
-                        ),
-                        IconButton(
-                            onPressed: () { goToPage( MyPosts(), 2, context);},
-                            icon: Icon(Icons.arrow_forward)
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                      "Your friends",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: secondaryColor,
-                      )
-                  ),
-                  displayFriends(castIntoListMap(user.friends)),
-                  ElevatedButton(
-                    child: Text("Sign Out"),
-                    onPressed: () async {
-                      AuthMethods().signOut();
-                      goToPage(LoginScreen(), 3, context);
-                    },
-                  ),
-                ]
-            ),
-          ),
-        )
+      ),
     );
   }
 }

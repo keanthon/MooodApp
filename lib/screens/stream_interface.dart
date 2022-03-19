@@ -40,15 +40,15 @@ class StreamInterfaceState extends State<StreamInterface> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        // backgroundColor: secondaryColor,
         centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("App", style: TextStyle(color: primaryColor)),
-          ],
-        ),
+        // title: Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   mainAxisSize: MainAxisSize.min,
+        //   children: <Widget>[
+        //     Image.asset("assets/images/logoAppBar.png"),
+        //   ],
+        // ),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
