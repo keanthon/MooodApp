@@ -75,8 +75,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             children: [
               Image.asset(
                 'assets/images/logo.png',
-                width: 400,
-                height: 400,
+                scale: 1.5,
               ),
             ],
           ),

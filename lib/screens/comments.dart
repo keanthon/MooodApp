@@ -184,7 +184,7 @@ class CommentsState extends State<Comments> {
                               ],
                             ),
                           ),
-                    ),
+                        ),
                       ),
                 TextFormField(
                   controller: inputCont,

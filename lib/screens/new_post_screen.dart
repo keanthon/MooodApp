@@ -34,6 +34,8 @@ class _NewPostState extends State<NewPost> {
   bool _isRecording = false;
   bool alreadyRecorded = false;
 
+  ScrollController sc = ScrollController();
+
   late StreamSubscription _recorderStatus;
 
   void startTimer() {
@@ -98,48 +100,55 @@ class _NewPostState extends State<NewPost> {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
     return SafeArea(
       child: Scaffold(
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
               ),
-              const Text("Hi! How's it hanging?",
+              const Text("How's it hanging?",
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 24,
                   )),
-              // these are suggested statuses
-              Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  margin: EdgeInsets.all(5),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Column(
-                            children: [
-                              for (var i = 0; i < 4; ++i)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
-                                      IconButton(
-                                        icon: Image.asset("assets/images/$j.png"),
-                                        iconSize: 75,
-                                        splashColor: pink,
-                                        onPressed: () {
-                                          _emoji = j.toString();
-                                        },
-                                        splashRadius: 50,
-                                        color: Colors.black,
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                        children: [
+                          for (var i = 0; i < 4; ++i)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(40)),
+                                      border: Border.all(
+                                        width: 3,
+                                        color: _emoji == j.toString() ? red : Colors.transparent,
+                                        style: BorderStyle.solid,
                                       ),
-                                  ],
-                                )
-                            ]
-                        ),
-                      ])),
+                                    ),
+                                    child: IconButton(
+                                      icon: Image.asset("assets/images/$j.png"),
+                                      iconSize: 70,
+                                      splashColor: pink,
+                                      onPressed: () {
+                                        setState(() {
+                                          _emoji = j.toString();
+                                        });
+                                      },
+                                      splashRadius: 50,
+                                      disabledColor: Colors.black,
+                                    ),
+                                  ),
+                              ],
+                            )
+                        ]
+                    ),
+                  ]),
               GestureDetector(
                 onLongPressStart: (_) async {
                   recorderInput.clear();
@@ -182,6 +191,13 @@ class _NewPostState extends State<NewPost> {
                   keyboardType: TextInputType.text,
                   obscureText: false,
                   maxLength: maxStatusCount,
+                  onTap: () {
+                    sc.animateTo(
+                      sc.position.minScrollExtent,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   buildCounter: (_,
                       {required currentLength,
                         maxLength,

@@ -51,9 +51,9 @@ class _PostCardState extends State<PostCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              CircleAvatar(
-                child: Text(widget.snap["emoji"], style: TextStyle(fontSize: 60),),
-                radius: 40,
+              Image.asset(
+                "assets/images/${widget.snap["emoji"]}.png",
+                scale: 5,
               ),
               Text("From ${widget.snap["fullName"]}"),
             ]
