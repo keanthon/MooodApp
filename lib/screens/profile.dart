@@ -91,14 +91,6 @@ class Profile extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                    "Your friends",
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.black,
-                    )
-                ),
-                displayFriends(castIntoListMap(user.friends)),
                 ElevatedButton(
                   child: Text("Sign Out"),
                   onPressed: () async {
