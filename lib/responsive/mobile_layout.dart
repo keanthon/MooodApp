@@ -89,6 +89,13 @@ class _MobileLayoutState extends State<MobileLayout> {
             });
           }
 
+          // reclick on friends again to refresh
+          if(index==2) {
+            setState(() {
+              _screens[2] = myFriends();
+            });
+          }
+
           setState(() {
             _bottomIndex = index;
           });

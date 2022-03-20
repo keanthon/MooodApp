@@ -26,8 +26,7 @@ class myFriendsState extends State<myFriends> {
     _firestore.collection("users").doc(uid).get()
       .then((value) {
         if (value.exists) {
-          print("hello WORLD");
-          if (friends.toString() != value.data()!["friends"].toString()) {
+          if (friends.length != (value.data()!["friends"] as List).length) {
             setState(() {
               friends = value.data()!["friends"];
             });
