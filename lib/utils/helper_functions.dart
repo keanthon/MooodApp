@@ -54,30 +54,6 @@ Set<String> castIntoUIDSet(dynamic value) {
   return s;
 }
 
-Widget displayFriends(List<Map<String, String>> friendRequests) {
-  return Column(
-    children: friendRequests.reversed.map((req) {
-      return (
-        Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: tertiaryColor,
-          ),
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(25),
-          child: Text(
-            req["fullName"]!,
-            style: const TextStyle(
-              fontSize: 18,
-              color: primaryColor,
-            )
-          )
-        )
-      );
-    }).toList(),
-  );
-}
-
 showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

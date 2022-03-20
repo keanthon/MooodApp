@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/providers/user_provider.dart';
 import 'package:moood/screens/calendar_screen.dart';
+import 'package:moood/screens/my_friends.dart';
 import 'package:moood/screens/profile.dart';
 import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/utils/helper_functions.dart';
@@ -31,6 +32,8 @@ class _MobileLayoutState extends State<MobileLayout> {
   List<Widget> _screens = [
     StreamInterface(),
     Profile(),
+
+    myFriends(),
   ];
 
   @override
@@ -72,6 +75,7 @@ class _MobileLayoutState extends State<MobileLayout> {
         items: <Widget>[
           Icon(Icons.feed, size: 30),
           Icon(Icons.account_circle, size: 30),
+          Icon(Icons.emoji_people, size: 30),
           Icon(Icons.calendar_month, size: 30),
         ],
         onTap: (index) {
@@ -84,6 +88,13 @@ class _MobileLayoutState extends State<MobileLayout> {
               keyCount = keyCount+1;
               _screens[0] = StreamInterface(key: Key("${keyCount}"),);
               print(keyCount);
+            });
+          }
+
+          // reclick on friends again to refresh
+          if(index==2) {
+            setState(() {
+              _screens[2] = myFriends();
             });
           }
 
