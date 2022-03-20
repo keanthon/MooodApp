@@ -146,9 +146,10 @@ class _NewPostState extends State<NewPost> {
                                   ),
                               ],
                             )
-                        ]
+                        ],
                     ),
-                  ]),
+                  ],
+                ),
               GestureDetector(
                 onLongPressStart: (_) async {
                   recorderInput.clear();

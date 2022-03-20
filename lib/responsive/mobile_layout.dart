@@ -18,8 +18,8 @@ import '../screens/search.dart';
 import '../screens/stream_interface.dart';
 
 class MobileLayout extends StatefulWidget {
-  const MobileLayout({Key? key}) : super(key: key);
-
+  final String uid;
+  const MobileLayout({Key? key, required this.uid}) : super(key: key);
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
 }
@@ -32,13 +32,14 @@ class _MobileLayoutState extends State<MobileLayout> {
   List<Widget> _screens = [
     StreamInterface(),
     Profile(),
+
     myFriends(),
-    // CalendarScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
+    _screens.add(CalendarScreen(uid: widget.uid));
   }
 
   @override
@@ -75,6 +76,7 @@ class _MobileLayoutState extends State<MobileLayout> {
           Icon(Icons.feed, size: 30),
           Icon(Icons.account_circle, size: 30),
           Icon(Icons.emoji_people, size: 30),
+          Icon(Icons.calendar_month, size: 30),
         ],
         onTap: (index) {
           //Handle button tap
