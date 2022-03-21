@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:moood/utils/globals.dart';
 import '../models/user_class.dart';
 import '../responsive/responsive_layout.dart';
@@ -54,30 +55,6 @@ Set<String> castIntoUIDSet(dynamic value) {
   return s;
 }
 
-Widget displayFriends(List<Map<String, String>> friendRequests) {
-  return Column(
-    children: friendRequests.reversed.map((req) {
-      return (
-        Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: tertiaryColor,
-          ),
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(25),
-          child: Text(
-            req["fullName"]!,
-            style: const TextStyle(
-              fontSize: 18,
-              color: primaryColor,
-            )
-          )
-        )
-      );
-    }).toList(),
-  );
-}
-
 showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -91,4 +68,13 @@ String? requireFunc(String? value) {
     return 'Required';
   }
   return null;
+}
+
+pickImage(ImageSource source) async {
+  final ImagePicker _imagePicker = ImagePicker();
+  XFile? _file = await _imagePicker.pickImage(source: source);
+  if (_file != null) {
+    return await _file.readAsBytes();
+  }
+  print('No Image Selected');
 }

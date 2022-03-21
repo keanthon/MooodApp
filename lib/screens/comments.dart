@@ -100,8 +100,8 @@ class CommentsState extends State<Comments> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CircleAvatar(
-                            child: Text(widget.snap["emoji"], style: const TextStyle(fontSize: 60),),
-                            radius: 40,
+                            child: Image.asset(widget.snap["emoji"]),
+                            radius: 60,
                           ),
                           Text("From ${widget.snap["fullName"]}"),
                         ]
@@ -184,7 +184,7 @@ class CommentsState extends State<Comments> {
                               ],
                             ),
                           ),
-                    ),
+                        ),
                       ),
                 TextFormField(
                   controller: inputCont,

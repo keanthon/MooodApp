@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/providers/user_provider.dart';
+import 'package:moood/screens/calendar_screen.dart';
+import 'package:moood/screens/my_friends.dart';
 import 'package:moood/screens/profile.dart';
 import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/utils/helper_functions.dart';
@@ -16,8 +18,8 @@ import '../screens/search.dart';
 import '../screens/stream_interface.dart';
 
 class MobileLayout extends StatefulWidget {
-  const MobileLayout({Key? key}) : super(key: key);
-
+  final String uid;
+  const MobileLayout({Key? key, required this.uid}) : super(key: key);
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
 }
@@ -30,11 +32,14 @@ class _MobileLayoutState extends State<MobileLayout> {
   List<Widget> _screens = [
     StreamInterface(),
     Profile(),
+
+    myFriends(),
   ];
 
   @override
   void initState() {
     super.initState();
+    _screens.add(CalendarScreen(uid: widget.uid));
   }
 
   @override
@@ -70,6 +75,8 @@ class _MobileLayoutState extends State<MobileLayout> {
         items: <Widget>[
           Icon(Icons.feed, size: 30),
           Icon(Icons.account_circle, size: 30),
+          Icon(Icons.emoji_people, size: 30),
+          Icon(Icons.calendar_month, size: 30),
         ],
         onTap: (index) {
           //Handle button tap
@@ -81,6 +88,13 @@ class _MobileLayoutState extends State<MobileLayout> {
               keyCount = keyCount+1;
               _screens[0] = StreamInterface(key: Key("${keyCount}"),);
               print(keyCount);
+            });
+          }
+
+          // reclick on friends again to refresh
+          if(index==2) {
+            setState(() {
+              _screens[2] = myFriends();
             });
           }
 

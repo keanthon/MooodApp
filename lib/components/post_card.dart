@@ -1,13 +1,13 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:moood/utils/helper_functions.dart';
 import 'package:sound_stream/sound_stream.dart';
 
+
 import '../screens/comments.dart';
+import '../utils/colors_styles.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -45,27 +45,53 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: postCardColor,
+      shape:  OutlineInputBorder(
+          borderRadius: BorderRadius.circular(40),
+          borderSide: BorderSide(width: 0, color: Colors.white70),
+          // borderSide: BorderSide(color: Colors.green, width: 1)
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CircleAvatar(
-                child: Text(widget.snap["emoji"], style: TextStyle(fontSize: 60),),
-                radius: 40,
-              ),
-              Text("From ${widget.snap["fullName"]}"),
-            ]
-          ),
           Padding(
-            padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
-            child: Text(
-              widget.snap["status"],
-              style: TextStyle(
-                  fontSize: 24,
-                )
+            padding: const EdgeInsets.fromLTRB(15,15,0,0),
+            child: Row(
+
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CircleAvatar(
+                  child: Image.network(widget.snap["proUrl"]),
+                  radius: 25,
+                ),
+                SizedBox(width: 10,),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${widget.snap["fullName"]}"),
+                      Text("${DateFormat.yMMMMd().format(widget.snap['date'].toDate())}"),
+                    ],
+                ),
+
+
+                // CircleAvatar(
+                //   child: Image.asset(widget.snap["emoji"]),
+                //   radius: 40,
+                // ),
+                // Text("From ${widget.snap["fullName"]}"),
+              ]
             ),
+          ),
+
+          Text(
+            widget.snap["status"],
+            style: TextStyle(
+                fontSize: 20,
+              )
+          ),
+          CircleAvatar(
+            child: Image.asset(widget.snap["emoji"]),
+            radius: 60,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

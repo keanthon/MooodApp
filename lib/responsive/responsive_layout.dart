@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moood/models/user_class.dart';
 import 'package:moood/providers/user_provider.dart';
 import 'package:moood/responsive/mobile_layout.dart';
 import 'package:moood/responsive/web_layout.dart';
@@ -31,12 +32,13 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
 
   @override
   Widget build(BuildContext context) {
+    UserClass? user = Provider.of<UserProvider>(context).getUser;
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > webScreenSize) {
         // 600 can be changed to 900 if you want to display tablet screen with mobile screen layout
         return const WebLayout();
       }
-      return const MobileLayout();
+      return MobileLayout(uid: user!.uid,);
     });
   }
 }
