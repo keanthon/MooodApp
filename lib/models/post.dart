@@ -11,6 +11,7 @@ class PostData {
   final String emoji;
   final List<Uint8List> recorderInput;
   final String fullName;
+  final String proUrl;
   // FIXME Add audio and location
   // final String audioClipDir;
   // Location
@@ -22,6 +23,7 @@ class PostData {
     required this.date,
     required this.recorderInput,
     required this.fullName,
+    required this.proUrl,
   });
 
   Map<String, dynamic> toJson() => {
@@ -31,6 +33,7 @@ class PostData {
     'date': date,
     'recorderInput': jsonEncode(recorderInput),
     'fullName': fullName,
+    'proUrl': proUrl,
   };
 
 }

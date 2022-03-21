@@ -1,12 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/responsive/responsive_layout.dart';
-import 'package:moood/screens/stream_interface.dart';
 import 'package:moood/utils/input_decoration.dart';
 
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
+
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -24,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _confirmPass = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  Uint8List? _image;
 
   void signUpUser(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -36,8 +40,10 @@ class _SignupScreenState extends State<SignupScreen> {
           password: _passwordCont.text,
           firstName: _firstName.text,
           lastName: _lastName.text,
-          username: _userName.text
+          username: _userName.text,
+          file: _image!
       );
+
 
       print(res);
 
@@ -54,6 +60,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
     }
 
+  }
+
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -89,6 +103,33 @@ class _SignupScreenState extends State<SignupScreen> {
               key: _formKey,
               child: Column(
                 children: [
+                  Stack(
+                    children: [
+                      _image != null
+                          ? CircleAvatar(
+                        radius: 64,
+                        backgroundImage: MemoryImage(_image!),
+                        backgroundColor: Colors.red,
+                      )
+                          : const CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                            'https://i.stack.imgur.com/l60Hf.png'),
+                        backgroundColor: Colors.red,
+                      ),
+                      Positioned(
+                        bottom: -10,
+                        left: 80,
+                        child: IconButton(
+                          onPressed: selectImage,
+                          icon: const Icon(Icons.add_a_photo),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
                   TextFormField(
                     validator: requireFunc,
                     controller: _firstName,
