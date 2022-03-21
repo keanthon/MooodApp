@@ -2,17 +2,21 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import 'package:moood/models/post.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import '../providers/user_provider.dart';
 import '../utils/helper_functions.dart';
+
 
 // Firebase Authentication Methods
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<UserClass> getUserDetails() async {
     User currentUser = _auth.currentUser!;
@@ -28,7 +32,7 @@ class AuthMethods {
     required String firstName,
     required String lastName,
     required String username,
-
+    required Uint8List file,
   }) async {
     String res = "Error occurred";
 
@@ -39,6 +43,10 @@ class AuthMethods {
 
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+
+        // get profphotourl
+        String photoUrl =
+        await uploadImageToStorage('profilePics', file, false);
 
         await _auth.currentUser?.updateDisplayName(firstName + " " + lastName);
 
@@ -53,6 +61,7 @@ class AuthMethods {
             email: email,
             bio: '',
             friends: [],
+            photoUrl: photoUrl,
         );
 
         _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
@@ -93,10 +102,11 @@ class AuthMethods {
     required List friends,
     required List<Uint8List> recorderInput,
     required String fullName,
+    required String proUrl,
     required BuildContext context,
   }) async {
     var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now(),
-                      recorderInput: recorderInput, fullName: fullName).toJson();
+                      recorderInput: recorderInput, fullName: fullName, proUrl: proUrl).toJson();
     String res = "Error";
 
     try {
@@ -153,5 +163,26 @@ class AuthMethods {
         .limit(1).get();
 
     return snapshot.docs[0].data();
+  }
+
+  // adding image to firebase storage
+  Future<String> uploadImageToStorage(String childName, Uint8List file, bool isPost) async {
+    // creating location to our firebase storage
+
+    Reference ref =
+    _storage.ref().child(childName).child(_auth.currentUser!.uid);
+    if(isPost) {
+      String id = const Uuid().v1();
+      ref = ref.child(id);
+    }
+
+    // putting in uint8list format -> Upload task like a future but not future
+    UploadTask uploadTask = ref.putData(
+        file
+    );
+
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 }

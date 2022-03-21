@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moood/utils/colors_styles.dart';
 
 class TextInputDecoration {
   final String hintText;
@@ -16,7 +17,7 @@ class TextInputDecoration {
     );
 
     return InputDecoration(
-      fillColor: backgroundColor,
+      fillColor: inputDecColor,
       hintText: hintText,
       hintStyle: const TextStyle(fontWeight: FontWeight.bold),
       border: inputBorder,

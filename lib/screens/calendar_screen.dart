@@ -47,7 +47,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         events[snap["date"].toDate()]?.add(PostCard(snap: snap));
       }
     }
-
   }
 
   List<Widget> _getEventsForDay(DateTime day) {
@@ -95,14 +94,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
             _focusedDay = focusedDay;
           },
         ),
-        const SizedBox(height: 8.0),
-        SingleChildScrollView(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: _getEventsForDay(_selectedDay).length,
-            itemBuilder: (BuildContext context, int index) {
-              return  _getEventsForDay(_selectedDay)[index];
-            },
+        // const SizedBox(height: 8.0),
+        Expanded(
+          child: Scrollbar(
+            child: ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: _getEventsForDay(_selectedDay).length,
+              itemBuilder: (BuildContext context, int index) {
+                return _getEventsForDay(_selectedDay)[index];
+              },
+            ),
           ),
         ),
       ],

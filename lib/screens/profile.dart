@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/components/post_card.dart';
 import 'package:moood/models/user_class.dart';
-import 'package:moood/utils/globals.dart';
 import 'package:moood/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
@@ -20,7 +19,7 @@ class Profile extends StatelessWidget {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
     return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: primaryColor,
         centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,81 +34,73 @@ class Profile extends StatelessWidget {
           ],
         ),
       ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column (
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // FIXME need custom profile pic
-                  CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('assets/images/logo.jpg'),
-                  ),
-                  Text(
-
-                      "Hi ${user.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: secondaryColor,
-                      )
-                  ),
-                  Container(
-                    width: 450,
-                    decoration: const BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: Column (
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                          ),
-                          Text(
-                              "Your status",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: primaryColor,
-                              )
-                          ),
-
-                          Provider.of<UserProvider>(context).getLastPost!=null ?
-                          PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
-                          Text(
-                            //FIXME change to latest post
-                              "Hello",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: primaryColor,
-                              )
-                          ),
-
-                          IconButton(
-                              onPressed: () { goToPage( MyPosts(), 2, context);},
-                              icon: Icon(Icons.arrow_forward)
-                          ),
-                        ],
-                      ),
-                    ),
-                  Text(
-                    "Your friends",
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column (
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // FIXME need custom profile pic
+                CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(user.photoUrl),
+                ),
+                Text(
+                    "Hi ${user.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
                     style: TextStyle(
                       fontSize: 24,
                       color: secondaryColor,
                     )
+                ),
+                Container(
+                  width: 450,
+                  // decoration: const BoxDecoration(
+                  //     color: secondaryColor,
+                  //     borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  child: Column (
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                      ),
+                      Text(
+                          "Your status",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
+                          )
+                      ),
+
+                      Provider.of<UserProvider>(context).getLastPost!=null ?
+                      PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
+                      Text(
+                        //FIXME change to latest post
+                          "Hello",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: primaryColor,
+                          )
+                      ),
+
+                      IconButton(
+                          onPressed: () { goToPage( MyPosts(), 2, context);},
+                          icon: Icon(Icons.arrow_forward)
+                      ),
+                    ],
                   ),
-                  displayFriends(castIntoListMap(user.friends)),
-                  ElevatedButton(
-                    child: Text("Sign Out"),
-                    onPressed: () async {
-                      AuthMethods().signOut();
-                      goToPage(LoginScreen(), 3, context);
-                    },
-                  ),
-                ]
-            ),
+                ),
+                ElevatedButton(
+                  child: Text("Sign Out"),
+                  onPressed: () async {
+                    AuthMethods().signOut();
+                    goToPage(LoginScreen(), 3, context);
+                  },
+                ),
+              ]
           ),
         ),
+      ),
+
     );
   }
 }

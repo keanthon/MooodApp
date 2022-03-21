@@ -25,19 +25,28 @@ class StreamInterface extends StatefulWidget {
 }
 
 class StreamInterfaceState extends State<StreamInterface> {
+  // cache emoji images
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    for (var i = 1; i <= 20; ++i) {
+      precacheImage(AssetImage("assets/images/$i.png"), context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
 
     return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        // backgroundColor: secondaryColor,
         centerTitle: true,
-        title: Row(
+        title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("App", style: TextStyle(color: primaryColor)),
+            Image.asset("assets/images/logoAppBar.png"),
           ],
         ),
         leading: Builder(

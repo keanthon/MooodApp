@@ -9,6 +9,7 @@ class UserClass {
   final String fullName;
   final String email;
   final String bio;
+  final String photoUrl;
   List friends;
 
   UserClass({
@@ -19,6 +20,7 @@ class UserClass {
     required this.fullName,
     required this.email,
     required this.bio,
+    required this.photoUrl,
     required this.friends,
   });
 
@@ -30,7 +32,9 @@ class UserClass {
     'uid': uid,
     'email': email,
     'bio': bio,
+    'photoUrl': photoUrl,
     'friends': friends,
+
   };
 
   // function to decode the json from snapshot
@@ -44,6 +48,7 @@ class UserClass {
         fullName: snapshot['fullName'],
         email: snapshot['email'],
         bio: snapshot['bio'],
+        photoUrl: snapshot['photoUrl'],
         friends: snapshot['friends'],
     );
   }
