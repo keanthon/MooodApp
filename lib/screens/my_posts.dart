@@ -24,7 +24,7 @@ class _MyPostsState extends State<MyPosts> {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
-    return SafeArea(
+    return (user==null) ? Center(child: CircularProgressIndicator()) : SafeArea(
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -34,10 +34,10 @@ class _MyPostsState extends State<MyPosts> {
           body: TabBarView(
             children: [
               FetchPosts(
-                uid: user!.uid,
+                uid: user.uid,
                 feedOrPost: "posts",
               ),
-              CalendarScreen(uid: user!.uid,),
+              CalendarScreen(uid: user.uid,),
             ],
           ),
         ),

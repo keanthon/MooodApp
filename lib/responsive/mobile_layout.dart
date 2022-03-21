@@ -50,7 +50,7 @@ class _MobileLayoutState extends State<MobileLayout> {
 
   @override
   Widget build(BuildContext context) {
-    UserClass? user = Provider.of<UserProvider>(context).getUser;
+    // UserClass? user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

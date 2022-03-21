@@ -46,7 +46,6 @@ class Profile extends StatelessWidget {
                   backgroundImage: NetworkImage(user.photoUrl),
                 ),
                 Text(
-
                     "Hi ${user.firstName} ${user.lastName}!\n#${getShortUID(user.uid)}",
                     style: TextStyle(
                       fontSize: 24,
@@ -101,6 +100,7 @@ class Profile extends StatelessWidget {
           ),
         ),
       ),
+
     );
   }
 }
