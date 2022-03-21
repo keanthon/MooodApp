@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/components/post_card.dart';
 import 'package:moood/models/user_class.dart';
-import 'package:moood/utils/globals.dart';
 import 'package:moood/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
@@ -44,7 +43,7 @@ class Profile extends StatelessWidget {
                 // FIXME need custom profile pic
                 CircleAvatar(
                   radius: 100,
-                  backgroundImage: AssetImage('assets/images/logo.png'),
+                  backgroundImage: NetworkImage(user.photoUrl),
                 ),
                 Text(
 

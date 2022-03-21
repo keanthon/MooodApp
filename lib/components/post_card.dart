@@ -1,14 +1,13 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:moood/utils/helper_functions.dart';
 import 'package:sound_stream/sound_stream.dart';
 
+
 import '../screens/comments.dart';
 import '../utils/colors_styles.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -62,7 +61,7 @@ class _PostCardState extends State<PostCard> {
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CircleAvatar(
-                  child: Text("Pro Pic"),
+                  child: Image.network(widget.snap["proUrl"]),
                   radius: 25,
                 ),
                 SizedBox(width: 10,),
@@ -70,7 +69,7 @@ class _PostCardState extends State<PostCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("${widget.snap["fullName"]}"),
-                      Text("date"),
+                      Text("${DateFormat.yMMMMd().format(widget.snap['date'].toDate())}"),
                     ],
                 ),
 

@@ -221,6 +221,7 @@ class _NewPostState extends State<NewPost> {
                           friends: user!.friends,
                           recorderInput: recorderInput,
                           fullName: user!.fullName,
+                          proUrl: user!.photoUrl,
                           context: context,
                       );
 
