@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/utils/helper_functions.dart';
 import 'package:sound_stream/sound_stream.dart';
@@ -26,6 +27,10 @@ class _PostCardState extends State<PostCard> {
   final PlayerStream _player = PlayerStream();
   bool currentlyPlaying = false;
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  List<dynamic> posts = [];
+
   void _play() async {
     await _player.start();
 
@@ -36,6 +41,19 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+  void getComments() async {
+    _firestore.collection("comments").doc(widget.postID).get()
+        .then((value) {
+      if (value.exists) {
+        if (posts.length != (value.get("comments") as List).length) {
+          setState(() {
+            posts = (value.get("comments") as List);
+          });
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +62,8 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    getComments();
+
     return Card(
       color: postCardColor,
       shape:  OutlineInputBorder(
@@ -72,13 +92,6 @@ class _PostCardState extends State<PostCard> {
                       Text("${DateFormat.yMMMMd().format(widget.snap['date'].toDate())}"),
                     ],
                 ),
-
-
-                // CircleAvatar(
-                //   child: Image.asset(widget.snap["emoji"]),
-                //   radius: 40,
-                // ),
-                // Text("From ${widget.snap["fullName"]}"),
               ]
             ),
           ),
@@ -124,14 +137,18 @@ class _PostCardState extends State<PostCard> {
                 maintainSize: true,
                 maintainState: true,
                 maintainAnimation: true,
-                child: IconButton(
-                  iconSize: 24.0,
-                  icon: const Icon(Icons.chat_bubble),
+                child: TextButton.icon(
+                  label: Text(posts.length.toString()),
+                  icon: const Icon(
+                    Icons.chat_bubble,
+                    size: 24,
+                  ),
                   onPressed: () => goToPage(
                       Comments(
                       recorderInput: widget.recorderInput,
                       snap: widget.snap,
-                      postID: widget.postID,),
+                      postID: widget.postID,
+                      posts: posts,),
                       2, context),
                 ),
               ),

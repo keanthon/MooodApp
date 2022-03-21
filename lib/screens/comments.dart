@@ -15,11 +15,13 @@ class Comments extends StatefulWidget {
   const Comments({Key? key,
     required this.snap,
     required this.recorderInput,
-    required this.postID,}) : super(key: key);
+    required this.postID,
+    required this.posts,}) : super(key: key);
 
   final dynamic snap;
   final List<Uint8List> recorderInput;
   final String postID;
+  final List<dynamic> posts;
 
   @override
   State<Comments> createState() => CommentsState();
@@ -63,8 +65,8 @@ class CommentsState extends State<Comments> {
   @override
   void initState() {
     super.initState();
-    getComments();
     _player.initialize();
+    posts = widget.posts;
   }
 
   @override
@@ -73,7 +75,6 @@ class CommentsState extends State<Comments> {
 
     if (sentMessage) {
       getComments();
-      print("here");
       sentMessage = false;
     }
 

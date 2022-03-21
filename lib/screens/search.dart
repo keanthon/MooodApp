@@ -55,10 +55,10 @@ class SearchState extends State<Search> {
           suggestedProfiles = value.docs.toList();
           for (var value in suggestedProfiles) {
             if (friendsSet.contains(value.get("uid"))) {
-              UIDToColorText[value.get("uid")] = [Colors.black, "Already friends"];
+              UIDToColorText[value.get("uid")] = [postCardColor, "Already friends"];
             }
             else if (!UIDToColorText.containsKey(value.get("uid"))) {
-              UIDToColorText[value.get("uid")] = [Colors.black, "Send friend request"];
+              UIDToColorText[value.get("uid")] = [postCardColor, "Send friend request"];
             }
           }
         });
@@ -92,11 +92,15 @@ class SearchState extends State<Search> {
               ),
               Material(
                 color: UIDToColorText[UID]![0],
+                shape:  OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide: const BorderSide(width: 0, color: Colors.white70),
+                ),
                 child: InkWell(
                   onTap: () {
                     if (!friendsSet.contains(UID) && UIDToColorText[UID]![1] == "Send friend request") {
                       setState(() {
-                        UIDToColorText[UID]![0] = secondaryColor;
+                        UIDToColorText[UID]![0] = red;
                         UIDToColorText[UID]![1] = "Sent!!";
                         sendFriendRequest(UID);
                       });
