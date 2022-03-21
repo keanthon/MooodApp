@@ -63,7 +63,7 @@ class StreamInterfaceState extends State<StreamInterface> {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.group, color: primaryColor, size: 30),
+                icon: const Icon(Icons.group, size: 30),
                 onPressed: () {
                   goToPage(FriendRequests(user: user), 2, context);
                 },
