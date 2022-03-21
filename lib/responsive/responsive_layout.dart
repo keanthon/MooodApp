@@ -33,7 +33,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
-    return LayoutBuilder(builder: (context, constraints) {
+    return (user==null) ? Center(child: CircularProgressIndicator()) :LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > webScreenSize) {
         // 600 can be changed to 900 if you want to display tablet screen with mobile screen layout
         return const WebLayout();
