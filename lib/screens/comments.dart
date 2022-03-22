@@ -80,13 +80,18 @@ class CommentsState extends State<Comments> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: grey,
         centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
-            Text("Comments", style: TextStyle(color: primaryColor)),
+            Text("Comments",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+              )
+            ),
           ],
         ),
       ),
@@ -100,15 +105,18 @@ class CommentsState extends State<Comments> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CircleAvatar(
-                            child: Image.asset(widget.snap["emoji"]),
-                            radius: 60,
+                          ClipOval(
+                              child: Image.asset(
+                                widget.snap["emoji"],
+                                width: 110,
+                                height: 110,
+                              )
                           ),
                           Text("From ${widget.snap["fullName"]}"),
                         ]
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                        padding: const EdgeInsets.only(left: 10, bottom: 10),
                         child: Text(
                             widget.snap["status"],
                             style: const TextStyle(
@@ -222,7 +230,7 @@ class CommentsState extends State<Comments> {
                         });
                         },
                       ),
-                      fillColor: secondaryColor,
+                      fillColor: michiganYellow,
                       hintStyle: const TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
                       contentPadding: const EdgeInsets.all(20),

@@ -102,9 +102,12 @@ class _PostCardState extends State<PostCard> {
                 fontSize: 20,
               )
           ),
-          CircleAvatar(
-            child: Image.asset(widget.snap["emoji"]),
-            radius: 60,
+          ClipOval(
+            child: Image.asset(
+              widget.snap["emoji"],
+              width: 110,
+              height: 110,
+            )
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
