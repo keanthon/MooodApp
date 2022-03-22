@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:moood/models/user_class.dart';
 import 'package:moood/providers/user_provider.dart';
 import 'package:moood/screens/calendar_screen.dart';
+import 'package:moood/screens/map_screen.dart';
 import 'package:moood/screens/my_friends.dart';
 import 'package:moood/screens/profile.dart';
 import 'package:moood/utils/colors_styles.dart';
@@ -34,6 +35,7 @@ class _MobileLayoutState extends State<MobileLayout> {
     Profile(),
 
     myFriends(),
+    MapScreen(),
   ];
 
   @override
@@ -75,7 +77,8 @@ class _MobileLayoutState extends State<MobileLayout> {
         items: <Widget>[
           Icon(Icons.feed, size: 30),
           Icon(Icons.account_circle, size: 30),
-          Icon(Icons.emoji_people, size: 30),
+          Icon(Icons.people, size: 30),
+          Icon(Icons.map),
           Icon(Icons.calendar_month, size: 30),
         ],
         onTap: (index) {
