@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/responsive/responsive_layout.dart';
@@ -28,6 +29,17 @@ class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   Uint8List? _image;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setImage();
+  }
+
+  Future<void> setImage() async {
+    _image = (await rootBundle.load('assets/images/blankProfile.jpg')).buffer.asUint8List();
+  }
 
   void signUpUser(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -109,12 +121,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           ? CircleAvatar(
                         radius: 64,
                         backgroundImage: MemoryImage(_image!),
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.white,
                       )
                           : const CircleAvatar(
                         radius: 64,
-                        backgroundImage: NetworkImage(
-                            'https://i.stack.imgur.com/l60Hf.png'),
+                        backgroundImage: AssetImage(
+                            'assets/images/blankProfile.jpg'),
                         backgroundColor: Colors.red,
                       ),
                       Positioned(
