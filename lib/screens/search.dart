@@ -133,7 +133,7 @@ class SearchState extends State<Search> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: secondaryColor,
+          backgroundColor: grey,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +142,8 @@ class SearchState extends State<Search> {
               Text(
                   "Search for people",
                   style: TextStyle(
-                      color: primaryColor
+                    color: Colors.black,
+                    fontSize: 24,
                   )
               ),
             ],

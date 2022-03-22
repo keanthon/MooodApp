@@ -42,16 +42,17 @@ class myFriendsState extends State<myFriends> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: secondaryColor,
+          backgroundColor: grey,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: const <Widget>[
               Text(
-                  "Your friends!",
+                  "Friends",
                   style: TextStyle(
-                      color: primaryColor
+                    color: Colors.black,
+                    fontSize: 24
                   )
               ),
             ],

@@ -182,7 +182,7 @@ class FriendRequestsState extends State<FriendRequests> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: secondaryColor,
+          backgroundColor: grey,
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +191,8 @@ class FriendRequestsState extends State<FriendRequests> {
               Text(
                   "Your friend requests",
                   style: TextStyle(
-                      color: primaryColor
+                    color: Colors.black,
+                    fontSize: 24,
                   )
               ),
             ],
