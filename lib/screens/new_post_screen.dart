@@ -101,6 +101,11 @@ class _NewPostState extends State<NewPost> {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
+
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double blockSize = width / 100;
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -136,7 +141,7 @@ class _NewPostState extends State<NewPost> {
                                     ),
                                     child: IconButton(
                                       icon: Image.asset("assets/images/$j.png"),
-                                      iconSize: 60,
+                                      iconSize: blockSize * 15,
                                       splashColor: pink,
                                       onPressed: () {
                                         setState(() {
