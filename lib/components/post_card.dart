@@ -81,7 +81,7 @@ class _PostCardState extends State<PostCard> {
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CircleAvatar(
-                  child: Image.network(widget.snap["proUrl"]),
+                  backgroundImage: NetworkImage(widget.snap["proUrl"]),
                   radius: 25,
                 ),
                 SizedBox(width: 10,),
