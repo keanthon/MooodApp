@@ -114,7 +114,7 @@ class FriendRequestsState extends State<FriendRequests> {
           Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: tertiaryColor,
+                color: blue,
               ),
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.all(25),
