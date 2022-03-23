@@ -14,9 +14,12 @@ class Profile extends StatelessWidget {
 
   Profile({Key? key});
 
+
+
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
+    Provider.of<UserProvider>(context).refreshLastPost();
     return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,

@@ -22,6 +22,7 @@ class _MobileLayoutState extends State<MobileLayout> {
   final PageController _pageController = PageController();
   int _bottomIndex = 0;
   int keyCount = 0;
+  DateTime priorTime = DateTime(0);
   List<Widget> _screens = [
     StreamInterface(),
 
@@ -87,7 +88,7 @@ class _MobileLayoutState extends State<MobileLayout> {
           }
 
           // reclick on friends again to refresh
-          if(index==1 && _bottomIndex==1) {
+          if(index==1) {
             setState(() {
               keyCount = keyCount+1;
               _screens[1] = myFriends(key: Key("${keyCount}"),);
@@ -95,13 +96,17 @@ class _MobileLayoutState extends State<MobileLayout> {
             });
           }
 
-          // reclick on map to refresh
-          if(index==2 && _bottomIndex==2) {
-            setState(() {
-              keyCount = keyCount+1;
-              _screens[2] = MapScreen(key: Key("${keyCount}"), uid: widget.uid,);
-              // print(keyCount);
-            });
+          // refresh map every 15 minutes
+          if(index==2) {
+            if(DateTime.now().difference(priorTime).inMinutes>15) {
+              priorTime = DateTime.now();
+              setState(() {
+                keyCount = keyCount + 1;
+                _screens[2] =
+                    MapScreen(key: Key("${keyCount}"), uid: widget.uid,);
+                // print(keyCount);
+              });
+            }
           }
 
           setState(() {
