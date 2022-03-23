@@ -120,7 +120,7 @@ class _NewPostState extends State<NewPost> {
                   children: <Widget>[
                     Column(
                         children: [
-                          for (var i = 0; i < 7; ++i)
+                          for (var i = 0; i < 5; ++i)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
