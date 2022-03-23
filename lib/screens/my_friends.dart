@@ -85,7 +85,7 @@ class myFriendsState extends State<myFriends> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   CircleAvatar(
-                                    child: Text("Pro Pic"),
+                                    backgroundImage: NetworkImage(friend["proUrl"]),
                                     radius: 25,
                                   ),
                                   Padding(padding: const EdgeInsets.only(right: 10)),

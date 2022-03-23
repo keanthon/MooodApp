@@ -36,6 +36,7 @@ class SearchState extends State<Search> {
         .update({"friendRequests": FieldValue.arrayUnion([{
           "UID": user.uid,
           "fullName": user.fullName,
+          "proUrl": user.photoUrl,
         }])});
   }
 
@@ -82,13 +83,22 @@ class SearchState extends State<Search> {
                 ),
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.all(20),
-                child: Text(
-                    value.get("fullName"),
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: primaryColor,
-                    )
-                )
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(value.get("photoUrl")),
+                      radius: 25,
+                    ),
+                    Padding(padding: const EdgeInsets.only(right: 10)),
+                    Text(
+                      value.get("fullName"),
+                      style: TextStyle(
+                        fontSize: 24,
+                        )
+                      ),
+                    ],
+                  )
               ),
               Material(
                 color: UIDToColorText[UID]![0],
