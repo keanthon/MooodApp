@@ -42,6 +42,7 @@ class FriendRequestsState extends State<FriendRequests> {
       .update({"friendRequests": FieldValue.arrayRemove([{
         "UID": req["UID"],
         "fullName": req["fullName"],
+        "proUrl": req["proUrl"],
     }])});
   }
 
@@ -52,6 +53,7 @@ class FriendRequestsState extends State<FriendRequests> {
     batch.update(ref, {"friends": FieldValue.arrayUnion([{
         "UID": req["UID"],
         "fullName": req["fullName"],
+        "proUrl": req["proUrl"]
       }])});
 
     // add to target friend list
@@ -59,6 +61,7 @@ class FriendRequestsState extends State<FriendRequests> {
     batch.update(ref, {"friends": FieldValue.arrayUnion([{
         "UID": user.uid,
         "fullName": user.fullName,
+        "proUrl": user.photoUrl,
       }])});
 
     await batch.commit();
@@ -118,12 +121,21 @@ class FriendRequestsState extends State<FriendRequests> {
               ),
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.all(25),
-              child: Text(
-                  req["fullName"]!,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: primaryColor,
-                  )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(req["proUrl"]!),
+                    radius: 25,
+                  ),
+                  Padding(padding: const EdgeInsets.only(right: 10)),
+                  Text(
+                      req["fullName"]!,
+                      style: TextStyle(
+                        fontSize: 24,
+                      )
+                  ),
+                ],
               )
           ),
           Row(
