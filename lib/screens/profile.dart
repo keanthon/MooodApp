@@ -28,7 +28,7 @@ class Profile extends StatelessWidget {
             Text(
                 "Your profile",
                 style: TextStyle(
-                    color: primaryColor
+                    color: Colors.black
                 )
             ),
           ],

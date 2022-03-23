@@ -2,7 +2,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/utils/colors_styles.dart';
-import 'package:moood/screens/calendar_screen.dart';
 import 'package:moood/screens/map_screen.dart';
 import 'package:moood/screens/my_friends.dart';
 import 'package:moood/screens/profile.dart';
@@ -25,16 +24,15 @@ class _MobileLayoutState extends State<MobileLayout> {
   int keyCount = 0;
   List<Widget> _screens = [
     StreamInterface(),
-    Profile(),
 
     myFriends(),
+    Profile(),
   ];
 
   @override
   void initState() {
     super.initState();
-    _screens.add(MapScreen(uid: widget.uid,));
-    _screens.add(CalendarScreen(uid: widget.uid));
+    _screens.insert(2,MapScreen(uid: widget.uid,));
   }
 
   @override
@@ -71,10 +69,9 @@ class _MobileLayoutState extends State<MobileLayout> {
         index: _bottomIndex,
         items: <Widget>[
           Icon(Icons.feed, size: 30),
-          Icon(Icons.account_circle, size: 30),
           Icon(Icons.people, size: 30),
           Icon(Icons.map),
-          Icon(Icons.calendar_month, size: 30),
+          Icon(Icons.account_circle, size: 30),
         ],
         onTap: (index) {
           //Handle button tap
@@ -90,20 +87,20 @@ class _MobileLayoutState extends State<MobileLayout> {
           }
 
           // reclick on friends again to refresh
-          if(index==2 && _bottomIndex==2) {
+          if(index==1 && _bottomIndex==1) {
             setState(() {
               keyCount = keyCount+1;
-              _screens[2] = myFriends(key: Key("${keyCount}"),);
-              print(keyCount);
+              _screens[1] = myFriends(key: Key("${keyCount}"),);
+              // print(keyCount);
             });
           }
 
           // reclick on map to refresh
-          if(index==3 && _bottomIndex==3) {
+          if(index==2 && _bottomIndex==2) {
             setState(() {
               keyCount = keyCount+1;
-              _screens[3] = MapScreen(key: Key("${keyCount}"), uid: widget.uid,);
-              print(keyCount);
+              _screens[2] = MapScreen(key: Key("${keyCount}"), uid: widget.uid,);
+              // print(keyCount);
             });
           }
 
