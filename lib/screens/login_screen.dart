@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/resources/auth_methods.dart';
-import 'package:moood/responsive/mobile_layout.dart';
 import 'package:moood/responsive/responsive_layout.dart';
-import 'package:moood/responsive/web_layout.dart';
-import 'package:moood/screens/stream_interface.dart';
+
 import 'package:moood/utils/input_decoration.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
