@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:moood/components/fetch_posts.dart';
-import 'package:moood/screens/calendar_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_class.dart';
 import '../providers/user_provider.dart';
+import '../utils/colors_styles.dart';
 
 class MyPosts extends StatefulWidget {
   const MyPosts({
@@ -24,23 +24,25 @@ class _MyPostsState extends State<MyPosts> {
   @override
   Widget build(BuildContext context) {
     UserClass? user = Provider.of<UserProvider>(context).getUser;
-    return (user==null) ? Center(child: CircularProgressIndicator()) : SafeArea(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: tab,
-          ),
-          body: TabBarView(
-            children: [
-              FetchPosts(
-                uid: user.uid,
-                feedOrPost: "posts",
-              ),
-              CalendarScreen(uid: user.uid,),
-            ],
-          ),
+    return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+                "Past Mooods",
+                style: TextStyle(
+                    color: Colors.black
+                )
+            ),
+          ],
         ),
+      ),
+      body: FetchPosts(
+        uid: user.uid,
+        feedOrPost: "posts",
       ),
     );
   }

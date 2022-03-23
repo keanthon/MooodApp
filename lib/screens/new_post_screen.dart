@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:provider/provider.dart';
 import '../models/user_class.dart';
@@ -9,8 +10,8 @@ import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
 import '../utils/globals.dart';
 import '../utils/helper_functions.dart';
-import '../utils/input_decoration.dart';
 import 'package:sound_stream/sound_stream.dart';
+import 'package:moood/utils/helper_functions.dart';
 
 class NewPost extends StatefulWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class NewPost extends StatefulWidget {
 
 class _NewPostState extends State<NewPost> {
   final TextEditingController statusController = TextEditingController();
+  late Position currPos;
   String _emoji="";
   bool select1=false, select2=false, select3=false, select4=false, select5=false;
   List<String> userStatuses = [];
@@ -37,6 +39,7 @@ class _NewPostState extends State<NewPost> {
   ScrollController sc = ScrollController();
 
   late StreamSubscription _recorderStatus;
+
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
@@ -209,10 +212,12 @@ class _NewPostState extends State<NewPost> {
                   child: InkWell(
                     onTap: () async {
                       // refresh to get the latest friend list
+                      Navigator.pop(context);
                       await Provider.of<UserProvider>(context, listen: false).refreshUser();
                       user = Provider.of<UserProvider>(context, listen: false).getUser;
-                      print("in inkwell post button");
+                      // print("in inkwell post button");
 
+                      currPos = await getGeoLocationPosition();
                       String res = await AuthMethods().sendPost(
                           uid: user!.uid,
                           status: statusController.text,
@@ -221,10 +226,10 @@ class _NewPostState extends State<NewPost> {
                           recorderInput: recorderInput,
                           fullName: user!.fullName,
                           proUrl: user!.photoUrl,
+                          location: [currPos.latitude, currPos.longitude],
                           context: context,
                       );
 
-                      Navigator.pop(context);
 
                     },
                     splashColor: secondaryColor,

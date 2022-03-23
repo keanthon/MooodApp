@@ -21,7 +21,7 @@ class AuthMethods {
   Future<UserClass> getUserDetails() async {
     User currentUser = _auth.currentUser!;
     DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
-    print(snap.data());
+    // print(snap.data());
     return UserClass.fromSnap(snap);
   }
 
@@ -67,7 +67,7 @@ class AuthMethods {
         _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
 
         res = "success";
-        print(res);
+        // print(res);
       }
     } catch(err) {
       res = err.toString();
@@ -103,10 +103,11 @@ class AuthMethods {
     required List<Uint8List> recorderInput,
     required String fullName,
     required String proUrl,
+    required List<double> location,
     required BuildContext context,
   }) async {
     var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now(),
-                      recorderInput: recorderInput, fullName: fullName, proUrl: proUrl).toJson();
+                      recorderInput: recorderInput, fullName: fullName, proUrl: proUrl, location: location).toJson();
     String res = "Error";
 
     try {
