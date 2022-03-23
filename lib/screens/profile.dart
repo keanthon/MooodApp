@@ -28,8 +28,10 @@ class Profile extends StatelessWidget {
             Text(
                 "Your profile",
                 style: TextStyle(
+
                   color: Colors.black,
                   fontSize: 24,
+
                 )
             ),
           ],
