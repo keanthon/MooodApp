@@ -28,7 +28,10 @@ class Profile extends StatelessWidget {
             Text(
                 "Your profile",
                 style: TextStyle(
-                    color: Colors.black
+
+                  color: Colors.black,
+                  fontSize: 24,
+
                 )
             ),
           ],
@@ -40,7 +43,9 @@ class Profile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // FIXME need custom profile pic
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                ),
                 CircleAvatar(
                   radius: 100,
                   backgroundImage: NetworkImage(user.photoUrl),

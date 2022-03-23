@@ -111,17 +111,16 @@ class _NewPostState extends State<NewPost> {
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
               ),
-              const Text("How's it hanging?",
+              const Text("How's it going?",
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 24,
                   )),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Column(
                         children: [
-                          for (var i = 0; i < 4; ++i)
+                          for (var i = 0; i < 7; ++i)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -130,14 +129,14 @@ class _NewPostState extends State<NewPost> {
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(Radius.circular(40)),
                                       border: Border.all(
-                                        width: 3,
+                                        width: 1,
                                         color: _emoji == "assets/images/${j.toString()}.png" ? red : Colors.transparent,
                                         style: BorderStyle.solid,
                                       ),
                                     ),
                                     child: IconButton(
                                       icon: Image.asset("assets/images/$j.png"),
-                                      iconSize: 50,
+                                      iconSize: 60,
                                       splashColor: pink,
                                       onPressed: () {
                                         setState(() {
@@ -242,6 +241,9 @@ class _NewPostState extends State<NewPost> {
                       ),
                     ),
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 25),
                 ),
               ]
             ),
