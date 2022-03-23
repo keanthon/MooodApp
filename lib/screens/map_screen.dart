@@ -47,7 +47,7 @@ class _MapScreenState extends State<MapScreen> {
       var snap = doc.data() as Map<String, dynamic>;
 
       BitmapDescriptor markerbitmap = await BitmapDescriptor.fromBytes(
-      await getBytesFromAsset(snap["emoji"], 110)
+      await getBytesFromAsset(snap["emoji"], 80)
       );
 
       // print("After image conversion");
