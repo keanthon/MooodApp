@@ -12,6 +12,7 @@ class PostData {
   final List<Uint8List> recorderInput;
   final String fullName;
   final String proUrl;
+  final List<double> location;
   // FIXME Add audio and location
   // final String audioClipDir;
   // Location
@@ -24,6 +25,7 @@ class PostData {
     required this.recorderInput,
     required this.fullName,
     required this.proUrl,
+    required this.location,
   });
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +36,7 @@ class PostData {
     'recorderInput': jsonEncode(recorderInput),
     'fullName': fullName,
     'proUrl': proUrl,
+    'location': location,
   };
 
 }
@@ -83,20 +86,20 @@ class PostsModel {
         lastVisibile = snapshots.docs[snapshots.docs.length - 1];
       }
       _data = snapshots.docs;
-      print(_data);
+      // print(_data);
     }
     else {
-      print("here1");
+      // print("here1");
       snapshots = await FirebaseFirestore.instance
           .collection('userfeed')
           .doc(uid)
           .collection(feedOrPost)
           .orderBy('date', descending: true).startAfterDocument(lastVisibile)
           .limit(limit).get();
-      print("here");
+      // print("here");
       _data.addAll(snapshots.docs);
     }
-    print(uid);
+    // print(uid);
     _isLoading = false;
     hasMore = (snapshots.docs.length == limit);
     _controller.add(_data);

@@ -57,7 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
 
-      print(res);
+      // print(res);
 
       setState(() {
         _isLoading = false;
