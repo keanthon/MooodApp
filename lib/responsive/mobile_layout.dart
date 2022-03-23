@@ -1,21 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moood/models/user_class.dart';
-import 'package:moood/providers/user_provider.dart';
+import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/screens/calendar_screen.dart';
 import 'package:moood/screens/map_screen.dart';
 import 'package:moood/screens/my_friends.dart';
 import 'package:moood/screens/profile.dart';
-import 'package:moood/utils/colors_styles.dart';
 import 'package:moood/utils/helper_functions.dart';
-import 'package:provider/provider.dart';
 
-import '../screens/friend_requests.dart';
 import '../screens/new_post_screen.dart';
-import '../screens/search.dart';
 import '../screens/stream_interface.dart';
 
 class MobileLayout extends StatefulWidget {
@@ -35,12 +28,12 @@ class _MobileLayoutState extends State<MobileLayout> {
     Profile(),
 
     myFriends(),
-    MapScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
+    _screens.add(MapScreen(uid: widget.uid,));
     _screens.add(CalendarScreen(uid: widget.uid));
   }
 
@@ -59,6 +52,7 @@ class _MobileLayoutState extends State<MobileLayout> {
         onPressed: () {
           goToPage(NewPost(), 2, context);
         },
+        backgroundColor: michiganBlue,
       ),
 
       // body: StreamInterface(),
@@ -69,9 +63,10 @@ class _MobileLayoutState extends State<MobileLayout> {
       ),
 
       bottomNavigationBar: CurvedNavigationBar(
+
         height: 60,
-        backgroundColor: Colors.purpleAccent,
-        color: Colors.deepPurpleAccent,
+        backgroundColor: Colors.yellow,
+        color: michiganYellow,
         animationDuration: Duration(milliseconds: 200),
         index: _bottomIndex,
         items: <Widget>[
@@ -84,20 +79,31 @@ class _MobileLayoutState extends State<MobileLayout> {
         onTap: (index) {
           //Handle button tap
 
-          print("bottomindex: ${_bottomIndex}");
+          // print("bottomindex: ${_bottomIndex}");
           // reclick on feed againn to refresh
           if(index==0 && _bottomIndex==0) {
             setState(() {
               keyCount = keyCount+1;
               _screens[0] = StreamInterface(key: Key("${keyCount}"),);
-              print(keyCount);
+              // print(keyCount);
             });
           }
 
           // reclick on friends again to refresh
-          if(index==2) {
+          if(index==2 && _bottomIndex==2) {
             setState(() {
-              _screens[2] = myFriends();
+              keyCount = keyCount+1;
+              _screens[2] = myFriends(key: Key("${keyCount}"),);
+              print(keyCount);
+            });
+          }
+
+          // reclick on map to refresh
+          if(index==3 && _bottomIndex==3) {
+            setState(() {
+              keyCount = keyCount+1;
+              _screens[3] = MapScreen(key: Key("${keyCount}"), uid: widget.uid,);
+              print(keyCount);
             });
           }
 

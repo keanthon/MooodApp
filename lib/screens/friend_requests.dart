@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/user_class.dart';
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
-import 'package:collection/collection.dart';
 
 
 class FriendRequests extends StatefulWidget {
@@ -103,7 +101,7 @@ class FriendRequestsState extends State<FriendRequests> {
       }
     }
 
-    print("in friend request");
+    // print("in friend request");
     for(var b in batchArray) {
       await b.commit();
     }
