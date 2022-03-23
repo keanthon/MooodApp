@@ -29,6 +29,7 @@ class StreamInterfaceState extends State<StreamInterface> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<UserProvider>(context).refreshUser();
     UserClass? user = Provider.of<UserProvider>(context).getUser;
 
     return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
