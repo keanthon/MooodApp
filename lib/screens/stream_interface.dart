@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/components/fetch_posts.dart';
 import 'package:moood/screens/search.dart';
@@ -15,6 +16,7 @@ class StreamInterface extends StatefulWidget {
   StreamInterfaceState createState() {
     return StreamInterfaceState();
   }
+
 }
 
 class StreamInterfaceState extends State<StreamInterface> {
@@ -31,6 +33,7 @@ class StreamInterfaceState extends State<StreamInterface> {
   Widget build(BuildContext context) {
     Provider.of<UserProvider>(context).refreshUser();
     UserClass? user = Provider.of<UserProvider>(context).getUser;
+
 
     return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
       appBar: AppBar(

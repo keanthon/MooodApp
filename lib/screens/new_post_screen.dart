@@ -40,12 +40,16 @@ class _NewPostState extends State<NewPost> {
 
   late StreamSubscription _recorderStatus;
 
+  List locColors = [Colors.lightBlue, Colors.grey];
+  List locIcons = [Icon(Icons.location_on), Icon(Icons.location_off)];
+  int locIndex = 0;
+
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
-      (Timer timer) {
+          (Timer timer) {
         if (mounted) {
           if (_totalRecording == 0) {
             stopRecording();
@@ -111,150 +115,199 @@ class _NewPostState extends State<NewPost> {
         body: SingleChildScrollView(
           reverse: true,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-              ),
-              const Text("How's it going?",
-                  style: TextStyle(
-                    color: secondaryColor,
-                    fontSize: 24,
-                  )),
-              Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: (){Navigator.pop(context);},
+                      iconSize: 20,
+                    ),
+                    const Text("How's it going?",
+                        style: TextStyle(
+                          color: secondaryColor,
+                          fontSize: 24,
+                        )),
+                    SizedBox(width: 20,)
+                  ],
+                ),
+                Row(
                   children: <Widget>[
                     Column(
-                        children: [
-                          for (var i = 0; i < 5; ++i)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(40)),
-                                      border: Border.all(
-                                        width: 1,
-                                        color: _emoji == "assets/images/${j.toString()}.png" ? red : Colors.transparent,
-                                        style: BorderStyle.solid,
-                                      ),
-                                    ),
-                                    child: IconButton(
-                                      icon: Image.asset("assets/images/$j.png"),
-                                      iconSize: blockSize * 15,
-                                      splashColor: pink,
-                                      onPressed: () {
-                                        setState(() {
-                                          _emoji = "assets/images/${j.toString()}.png";
-                                        });
-                                      },
-                                      splashRadius: 50,
+                      children: [
+                        for (var i = 0; i < 5; ++i)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (var j = i * 5 + 1; j <= i * 5 + 5; ++j)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                                    border: Border.all(
+                                      width: 1,
+                                      color: _emoji == "assets/images/${j.toString()}.png" ? red : Colors.transparent,
+                                      style: BorderStyle.solid,
                                     ),
                                   ),
-                              ],
-                            )
-                        ],
+                                  child: IconButton(
+                                    icon: Image.asset("assets/images/$j.png"),
+                                    iconSize: blockSize * 15,
+                                    splashColor: pink,
+                                    onPressed: () {
+                                      setState(() {
+                                        _emoji = "assets/images/${j.toString()}.png";
+                                      });
+                                    },
+                                    splashRadius: 50,
+                                  ),
+                                ),
+                            ],
+                          )
+                      ],
                     ),
                   ],
                 ),
-              GestureDetector(
-                onLongPressStart: (_) async {
-                  recorderInput.clear();
-                  _recorder.start();
-                  setState(() {
-                    startTimer();
-                    _counterVisible = true;
-                  });
-                },
-                onLongPressEnd: (_) {
-                  stopRecording();
-                },
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  label: alreadyRecorded ? const Text("Re-record audio!") : const Text("Hold to record audio!"),
-                  icon: const Icon(Icons.mic),
-                  style: ElevatedButton.styleFrom(
-                    primary: alreadyRecorded ? secondaryColor : michiganBlue,
-                  ),
-                )
-              ),
+                GestureDetector(
+                    onLongPressStart: (_) async {
+                      recorderInput.clear();
+                      _recorder.start();
+                      setState(() {
+                        startTimer();
+                        _counterVisible = true;
+                      });
+                    },
+                    onLongPressEnd: (_) {
+                      stopRecording();
+                    },
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      label: alreadyRecorded ? const Text("Re-record audio!") : const Text("Hold to record audio!"),
+                      icon: const Icon(Icons.mic),
+                      style: ElevatedButton.styleFrom(
+                        primary: alreadyRecorded ? secondaryColor : michiganBlue,
+                      ),
+                    )
+                ),
                 Visibility(
                   visible: _counterVisible,
                   child: Padding(
                     padding: const EdgeInsets.all(25),
                     child: Text(
-                      _totalRecording.toString(),
-                      style: const TextStyle(
-                        color: secondaryColor,
-                        fontSize: 60,
-                      )
+                        _totalRecording.toString(),
+                        style: const TextStyle(
+                          color: secondaryColor,
+                          fontSize: 60,
+                        )
                     ),
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
-                  child: TextFormField(
-                    validator: requireFunc,
-                    controller: statusController,
-                    keyboardType: TextInputType.text,
-                    obscureText: false,
-                    maxLength: maxStatusCount,
-                    buildCounter: (_,
-                        {required currentLength,
-                          maxLength,
-                          required isFocused}) =>
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text(
-                            (maxLength! - currentLength).toString() +
-                                " characters left!!",
-                            style: TextStyle(color: secondaryColor, fontSize: 18),
+                    margin: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
+                    child: TextFormField(
+                        validator: requireFunc,
+                        controller: statusController,
+                        keyboardType: TextInputType.text,
+                        obscureText: false,
+                        maxLength: maxStatusCount,
+                        buildCounter: (_,
+                            {required currentLength,
+                              maxLength,
+                              required isFocused}) =>
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: Text(
+                                (maxLength! - currentLength).toString() +
+                                    " characters left!!",
+                                style: TextStyle(color: secondaryColor, fontSize: 18),
+                              ),
+                            )
+                    )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SizedBox(width: 50,),
+                    Material(
+                      child: InkWell(
+                        onTap: () async {
+                          // refresh to get the latest friend list
+                          if(_emoji=="") {
+                            showSnackBar("Please select an emoji!", context);
+                          }
+
+                          else {
+                            Navigator.pop(context);
+                            await Provider.of<UserProvider>(
+                                context, listen: false).refreshUser();
+                            user = Provider
+                                .of<UserProvider>(context, listen: false)
+                                .getUser;
+                            // print("in inkwell post button");
+
+                            currPos = await getGeoLocationPosition();
+
+                            String res = await AuthMethods().sendPost(
+                              uid: user!.uid,
+                              status: statusController.text,
+                              emoji: _emoji,
+                              friends: user!.friends,
+                              recorderInput: recorderInput,
+                              fullName: user!.fullName,
+                              proUrl: user!.photoUrl,
+                              location: (locIndex == 0) ? [
+                                currPos.latitude,
+                                currPos.longitude
+                              ] : [],
+                              context: context,
+                            );
+                          }
+
+
+
+                        },
+                        splashColor: secondaryColor,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: const Text(
+                            "Post",
+                            style: TextStyle(fontSize: 18),
                           ),
-                        )
-                  )
-              ),
-                Material(
-                  child: InkWell(
-                    onTap: () async {
-                      // refresh to get the latest friend list
-                      Navigator.pop(context);
-                      await Provider.of<UserProvider>(context, listen: false).refreshUser();
-                      user = Provider.of<UserProvider>(context, listen: false).getUser;
-                      // print("in inkwell post button");
-
-                      currPos = await getGeoLocationPosition();
-                      String res = await AuthMethods().sendPost(
-                          uid: user!.uid,
-                          status: statusController.text,
-                          emoji: _emoji,
-                          friends: user!.friends,
-                          recorderInput: recorderInput,
-                          fullName: user!.fullName,
-                          proUrl: user!.photoUrl,
-                          location: [currPos.latitude, currPos.longitude],
-                          context: context,
-                      );
-
-
-                    },
-                    splashColor: secondaryColor,
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: const Text(
-                        "Post",
-                        style: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ),
-                  ),
+                    IconButton(
+                      onPressed: () {
+                        if(locIndex==1) {
+                          setState(() {
+                            locIndex = 0;
+                          });
+
+                        }
+                        else {
+                          setState(() {
+                            locIndex = 1;
+                          });
+                        }
+                      },
+                      color: locColors[locIndex],
+                      tooltip: "Location",
+                      iconSize: 32,
+                      icon: locIcons[locIndex],
+                    )
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 25),
                 ),
               ]
-            ),
           ),
         ),
-      );
+      ),
+    );
   }
 }
-

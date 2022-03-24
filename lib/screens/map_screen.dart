@@ -53,7 +53,7 @@ class _MapScreenState extends State<MapScreen> {
       // print("After image conversion");
       // print(snap["location"][0]);
       // print(snap["location"][1]);
-      if(snap["location"] != null) {
+      if(snap["location"].length!=0) {
         Marker m = Marker(
           markerId: MarkerId("${id}"),
           position: LatLng(snap["location"][0], snap["location"][1]),
