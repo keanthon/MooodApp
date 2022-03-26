@@ -163,7 +163,7 @@ class AuthMethods {
         .orderBy('date', descending: true)
         .limit(1).get();
 
-    return snapshot.docs[0].data();
+    return snapshot.docs.length==0 ? {} : snapshot.docs[0].data();
   }
 
   // adding image to firebase storage

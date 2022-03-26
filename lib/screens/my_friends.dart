@@ -92,7 +92,7 @@ class myFriendsState extends State<myFriends> {
                                   Text(
                                     friend["fullName"],
                                     style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 16,
                                     )
                                   ),
                                 ],

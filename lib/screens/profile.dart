@@ -79,7 +79,7 @@ class Profile extends StatelessWidget {
                           )
                       ),
 
-                      Provider.of<UserProvider>(context).getLastPost!=null ?
+                      Provider.of<UserProvider>(context).getLastPost!= {} ?
                       PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
                       Text(
                         //FIXME change to latest post

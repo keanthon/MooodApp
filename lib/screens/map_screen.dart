@@ -75,7 +75,7 @@ class _MapScreenState extends State<MapScreen> {
     _userPos = await getGeoLocationPosition();
     return CameraPosition(
       target: LatLng(_userPos!.latitude, _userPos!.longitude),
-      zoom: 15,
+      zoom: 17.5,
     );
 
   }
