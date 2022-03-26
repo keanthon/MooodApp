@@ -230,6 +230,8 @@ class CommentsState extends State<Comments> {
                           currentLength = 0;
                           sentMessage = true;
                         });
+                        FocusManager.instance.primaryFocus?.unfocus();
+
                         },
                       ),
                       fillColor: michiganYellow,
