@@ -94,7 +94,7 @@ class SearchState extends State<Search> {
                     Text(
                       value.get("fullName"),
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 16,
                         )
                       ),
                     ],
