@@ -60,12 +60,14 @@ class CommentsState extends State<Comments> {
           });
         }
     });
+    // print('db call');
   }
 
   @override
   void initState() {
     super.initState();
     _player.initialize();
+    getComments();
     posts = widget.posts;
   }
 

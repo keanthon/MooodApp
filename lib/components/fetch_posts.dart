@@ -18,12 +18,10 @@ class FetchPosts extends StatefulWidget {
   State<FetchPosts> createState() => _FetchPostsState();
 }
 
-class _FetchPostsState extends State<FetchPosts> with AutomaticKeepAliveClientMixin {
+class _FetchPostsState extends State<FetchPosts> {
   final scrollController = ScrollController();
   late PostsModel posts;
 
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {

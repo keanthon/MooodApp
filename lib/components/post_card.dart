@@ -24,6 +24,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+
   final PlayerStream _player = PlayerStream();
   bool currentlyPlaying = false;
 
@@ -65,18 +66,20 @@ class _PostCardState extends State<PostCard> {
           });
         }
       }
+
     });
+    // print('db call');
   }
 
   @override
   void initState() {
     super.initState();
+    getComments();
     _player.initialize();
   }
 
   @override
   Widget build(BuildContext context) {
-    getComments();
 
     return Card(
       color: postCardColor,
@@ -160,13 +163,16 @@ class _PostCardState extends State<PostCard> {
                     Icons.chat_bubble,
                     size: 24,
                   ),
-                  onPressed: () => goToPage(
+                  onPressed: ()  {
+                    goToPage(
                       Comments(
                       recorderInput: widget.recorderInput,
                       snap: widget.snap,
                       postID: widget.postID,
                       posts: posts,),
-                      2, context),
+                      2, context);
+
+                  }
                 ),
               ),
             ]
