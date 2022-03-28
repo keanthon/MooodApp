@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moood/utils/globals.dart';
-
+import 'package:intl/intl.dart';
 import 'colors_styles.dart';
 
 // 1 for push replace, 2 for push, 3 for pushandremoveuntil
@@ -118,4 +118,18 @@ Future<Uint8List> getBytesFromAsset(String path, int width) async {
   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
   ui.FrameInfo fi = await codec.getNextFrame();
   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+}
+
+String getDate(DateTime date) {
+  Duration diff = DateTime.now().difference(date);
+  if(diff.inHours<24) {
+    if(diff.inMinutes<60) {
+      if(diff.inSeconds<60) {
+        return "Just Now";
+      }
+      return "${diff.inMinutes} minutes ago";
+    }
+    return "${diff.inHours} hours ago";
+  }
+  return DateFormat.yMMMMd().format(date);
 }

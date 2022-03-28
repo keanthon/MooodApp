@@ -32,19 +32,6 @@ class _PostCardState extends State<PostCard> {
 
   List<dynamic> posts = [];
 
-  String getDate(DateTime date) {
-    Duration diff = DateTime.now().difference(date);
-    if(diff.inHours<24) {
-      if(diff.inMinutes<60) {
-        if(diff.inSeconds<60) {
-          return "Just Now";
-        }
-        return "${diff.inMinutes} minutes ago";
-      }
-      return "${diff.inHours} hours ago";
-    }
-    return DateFormat.yMMMMd().format(date);
-  }
 
   void _play() async {
     await _player.start();

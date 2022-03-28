@@ -59,7 +59,7 @@ class _MapScreenState extends State<MapScreen> {
           position: LatLng(snap["location"][0], snap["location"][1]),
           infoWindow: InfoWindow(
             title: snap["status"] ?? "",
-            snippet: snap["fullName"],
+            snippet: snap["fullName"] + "  " + getDate(snap["date"].toDate()),
           ),
           icon: markerbitmap,
         );
