@@ -142,6 +142,7 @@ class SearchState extends State<Search> {
     FocusScope.of(context).requestFocus(focusNode);
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: grey,
           centerTitle: true,
