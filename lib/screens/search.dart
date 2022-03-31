@@ -19,6 +19,9 @@ class Search extends StatefulWidget {
 class SearchState extends State<Search> {
   SearchState(this.user, {Key? key}) {
     friendsSet = castIntoUIDSet(user.friends);
+    user.blocked.forEach((element) {
+      blockedSet.add(element["UID"]);
+    });
   }
 
   final TextEditingController searchCont = TextEditingController();
@@ -29,6 +32,7 @@ class SearchState extends State<Search> {
   List<QueryDocumentSnapshot<Map<String, dynamic>>> suggestedProfiles = [];
   Map<String, List<dynamic>> UIDToColorText = {};
   Set<String> friendsSet = {};
+  Set<dynamic> blockedSet = {};
 
   void sendFriendRequest(String uid) {
     _firestore.collection("users")
@@ -46,9 +50,10 @@ class SearchState extends State<Search> {
         suggestedProfiles = [];
       });
     } else {
+      input = input.toLowerCase();
       _firestore.collection("users")
-          .where("fullName", isGreaterThanOrEqualTo: input)
-          .where("fullName", isLessThanOrEqualTo: input + "\uf8ff")
+          .where("insensitiveFullName", isGreaterThanOrEqualTo: input)
+          .where("insensitiveFullName", isLessThanOrEqualTo: input + "\uf8ff")
           .limit(5)
           .get()
           .then((value) {
@@ -67,10 +72,10 @@ class SearchState extends State<Search> {
     }
   }
 
-  Widget displaySuggestedProfiles(List<QueryDocumentSnapshot<Map<String, dynamic>>> suggestedProfiles, UserClass user) {
+  Widget displaySuggestedProfiles(List<QueryDocumentSnapshot<Map<String, dynamic>>> suggestedProfiles, UserClass user, double screenWidth) {
     List<Widget> withoutMe = [];
     suggestedProfiles.forEach((value) {
-      if (value.get("uid") != user.uid) {
+      if (value.get("uid") != user.uid && !blockedSet.contains(value.get("uid"))) {
         String UID = value.get("uid");
         withoutMe.add(
           Column(
@@ -81,24 +86,28 @@ class SearchState extends State<Search> {
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   color: blue,
                 ),
+                width: screenWidth,
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(value.get("photoUrl")),
-                      radius: 25,
-                    ),
-                    Padding(padding: const EdgeInsets.only(right: 10)),
-                    Text(
-                      value.get("fullName"),
-                      style: TextStyle(
-                        fontSize: 16,
-                        )
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(value.get("photoUrl")),
+                        radius: 25,
                       ),
-                    ],
-                  )
+                      Padding(padding: const EdgeInsets.only(right: 10)),
+                      Text(
+                        value.get("fullName"),
+                        style: TextStyle(
+                          fontSize: 16,
+                          )
+                        ),
+                      ],
+                    ),
+                )
               ),
               Material(
                 color: UIDToColorText[UID]![0],
@@ -140,9 +149,10 @@ class SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(focusNode);
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false, FIXME we can't scroll down if this is true
         appBar: AppBar(
           backgroundColor: grey,
           centerTitle: true,
@@ -161,28 +171,27 @@ class SearchState extends State<Search> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Center (
-              child: Column (
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    TextFormField(
-                      focusNode: focusNode,
-                      controller: searchCont,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: getSuggestions,
-                      obscureText: false,
-                      decoration: TextInputDecoration(
-                          '[First name] [last name]#[ID] ...',
-                          Colors.redAccent[100]).decorate(),
-                    ),
-                    Column (
-                      children: [
-                        displaySuggestedProfiles(suggestedProfiles, user),
-                      ]
-                    ),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column (
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(
+                  focusNode: focusNode,
+                  controller: searchCont,
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: getSuggestions,
+                  obscureText: false,
+                  decoration: TextInputDecoration(
+                      '[First name] [last name]#[ID] ...',
+                      Colors.redAccent[100]).decorate(),
+                ),
+                Column (
+                  children: [
+                    displaySuggestedProfiles(suggestedProfiles, user, screenWidth),
                   ]
-              )
-      ),
+                ),
+              ]
+          ),
         )
     );
   }

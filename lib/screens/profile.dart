@@ -62,9 +62,6 @@ class Profile extends StatelessWidget {
                 ),
                 Container(
                   width: 450,
-                  // decoration: const BoxDecoration(
-                  //     color: secondaryColor,
-                  //     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   child: Column (
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -79,16 +76,8 @@ class Profile extends StatelessWidget {
                           )
                       ),
 
-                      Provider.of<UserProvider>(context).getLastPost!= {} ?
-                      PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
-                      Text(
-                        //FIXME change to latest post
-                          "Hello",
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: primaryColor,
-                          )
-                      ),
+                      if (Provider.of<UserProvider>(context).getLastPost!.length != 0)
+                        PostCard(snap: Provider.of<UserProvider>(context).getLastPost),
 
                       IconButton(
                           onPressed: () { goToPage( MyPosts(), 2, context);},

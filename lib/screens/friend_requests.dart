@@ -121,21 +121,25 @@ class FriendRequestsState extends State<FriendRequests> {
               ),
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.all(25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(req["proUrl"]!),
-                    radius: 25,
-                  ),
-                  Padding(padding: const EdgeInsets.only(right: 10)),
-                  Text(
-                      req["fullName"]!,
-                      style: TextStyle(
-                        fontSize: 24,
-                      )
-                  ),
-                ],
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(req["proUrl"]!),
+                      radius: 25,
+                    ),
+                    Padding(padding: const EdgeInsets.only(right: 10)),
+                    Text(
+                        req["fullName"]!,
+                        style: TextStyle(
+                          fontSize: 24,
+                        )
+                    ),
+                  ],
+                ),
               )
           ),
           Row(

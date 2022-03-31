@@ -7,10 +7,12 @@ class UserClass {
   final String firstName;
   final String lastName;
   final String fullName;
+  final String insensitiveFullName;
   final String email;
   final String bio;
   final String photoUrl;
   List friends;
+  List blocked;
 
   UserClass({
     required this.uid,
@@ -18,10 +20,12 @@ class UserClass {
     required this.firstName,
     required this.lastName,
     required this.fullName,
+    required this.insensitiveFullName,
     required this.email,
     required this.bio,
     required this.photoUrl,
     required this.friends,
+    required this.blocked,
   });
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +33,7 @@ class UserClass {
     'firstName': firstName,
     'lastName': lastName,
     'fullName': fullName,
+    'insensitiveFullName': insensitiveFullName,
     'uid': uid,
     'email': email,
     'bio': bio,
@@ -46,10 +51,12 @@ class UserClass {
         firstName: snapshot['firstName'],
         lastName: snapshot['lastName'],
         fullName: snapshot['fullName'],
+        insensitiveFullName: snapshot['insensitiveFullName'],
         email: snapshot['email'],
         bio: snapshot['bio'],
         photoUrl: snapshot['photoUrl'],
         friends: snapshot['friends'],
+        blocked: snapshot['blocked'] == null ? [] : snapshot['blocked'],
     );
   }
 }

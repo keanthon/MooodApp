@@ -54,7 +54,7 @@ class _FetchPostsState extends State<FetchPosts> {
               separatorBuilder: (context, index) => Divider(),
               itemCount: _snapshot.data.length + 1,
               itemBuilder: (BuildContext _context, int index) {
-                if (index < _snapshot.data.length) {
+                if (index < _snapshot.data.length && _snapshot.data.length != 0) {
                   dynamic _snapData = _snapshot.data[index].data();
                   List<Uint8List> recorderInput = (jsonDecode(_snapData["recorderInput"]) as List).map((e) {
                     return Uint8List.fromList(e.cast<int>());

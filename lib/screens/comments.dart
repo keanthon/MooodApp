@@ -15,13 +15,11 @@ class Comments extends StatefulWidget {
   const Comments({Key? key,
     required this.snap,
     required this.recorderInput,
-    required this.postID,
-    required this.posts,}) : super(key: key);
+    required this.postID,}) : super(key: key);
 
   final dynamic snap;
   final List<Uint8List> recorderInput;
   final String postID;
-  final List<dynamic> posts;
 
   @override
   State<Comments> createState() => CommentsState();
@@ -60,7 +58,7 @@ class CommentsState extends State<Comments> {
           });
         }
     });
-    // print('db call');
+    // print('db call in comments screen');
   }
 
   @override
@@ -68,7 +66,6 @@ class CommentsState extends State<Comments> {
     super.initState();
     _player.initialize();
     getComments();
-    posts = widget.posts;
   }
 
   @override
@@ -156,44 +153,41 @@ class CommentsState extends State<Comments> {
                       onRefresh: () async {
                         getComments();
                       },
-                      child: SingleChildScrollView(
+                      child: ListView(
                         controller: commentsCont,
                         scrollDirection: Axis.vertical,
                         physics: const AlwaysScrollableScrollPhysics(),
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          children: [
-                            if (posts.isNotEmpty)
-                              for (var post in posts.reversed)
-                                Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Row(
-                                      children: [
-                                        Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  "${post["fullName"]} :",
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                    color: secondaryColor,
-                                                  )
+                        children: [
+                          if (posts.isNotEmpty)
+                            for (var post in posts.reversed)
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                "${post["fullName"]} :",
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: secondaryColor,
+                                                )
+                                            ),
+                                            Text(
+                                                "${post["comment"]}",
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                )
                                               ),
-                                              Text(
-                                                  "${post["comment"]}",
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                  )
-                                                ),
-                                            ]
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ),
-                              ],
-                            ),
+                                          ]
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ),
+                            ],
                           ),
                         ),
                       ),
