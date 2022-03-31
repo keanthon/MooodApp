@@ -43,25 +43,9 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
-  void getComments() async {
-    _firestore.collection("comments").doc(widget.postID).get()
-        .then((value) {
-      if (value.exists) {
-        if (posts.length != (value.get("comments") as List).length) {
-          setState(() {
-            posts = (value.get("comments") as List);
-          });
-        }
-      }
-
-    });
-    // print('db call');
-  }
-
   @override
   void initState() {
     super.initState();
-    getComments();
     _player.initialize();
   }
 
@@ -81,20 +65,23 @@ class _PostCardState extends State<PostCard> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15,15,0,0),
             child: Row(
-
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CircleAvatar(
                   backgroundImage: NetworkImage(widget.snap["proUrl"]),
                   radius: 25,
                 ),
                 SizedBox(width: 10,),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("${widget.snap["fullName"]}"),
-                      Text(getDate(widget.snap['date'].toDate())),
-                    ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("${widget.snap["fullName"]}"),
+                          Text(getDate(widget.snap['date'].toDate())),
+                        ],
+                    ),
+                  ),
                 ),
               ]
             ),
@@ -144,8 +131,7 @@ class _PostCardState extends State<PostCard> {
                 maintainSize: true,
                 maintainState: true,
                 maintainAnimation: true,
-                child: TextButton.icon(
-                  label: Text(posts.length.toString()),
+                child: IconButton(
                   icon: const Icon(
                     Icons.chat_bubble,
                     size: 24,
@@ -155,8 +141,7 @@ class _PostCardState extends State<PostCard> {
                       Comments(
                       recorderInput: widget.recorderInput,
                       snap: widget.snap,
-                      postID: widget.postID,
-                      posts: posts,),
+                      postID: widget.postID,),
                       2, context);
 
                   }
