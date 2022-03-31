@@ -79,20 +79,13 @@ class Profile extends StatelessWidget {
                           )
                       ),
 
-                      Provider.of<UserProvider>(context).getLastPost!= {} ?
+                      Provider.of<UserProvider>(context).getLastPost!=null ?
                       PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
-                      Text(
-                        //FIXME change to latest post
-                          "Hello",
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: primaryColor,
-                          )
-                      ),
+                      SizedBox(height: 15,),
 
                       IconButton(
                           onPressed: () { goToPage( MyPosts(), 2, context);},
-                          icon: Icon(Icons.arrow_forward)
+                          icon: Icon(Icons.arrow_forward),
                       ),
                     ],
                   ),
