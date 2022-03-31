@@ -62,9 +62,6 @@ class Profile extends StatelessWidget {
                 ),
                 Container(
                   width: 450,
-                  // decoration: const BoxDecoration(
-                  //     color: secondaryColor,
-                  //     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   child: Column (
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -79,9 +76,11 @@ class Profile extends StatelessWidget {
                           )
                       ),
 
+
                       Provider.of<UserProvider>(context).getLastPost!=null ?
                       PostCard(snap: Provider.of<UserProvider>(context).getLastPost) :
                       SizedBox(height: 15,),
+
 
                       IconButton(
                           onPressed: () { goToPage( MyPosts(), 2, context);},

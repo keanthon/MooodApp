@@ -58,10 +58,12 @@ class AuthMethods {
             firstName: firstName,
             lastName: lastName,
             fullName: "$firstName $lastName#${getShortUID(cred.user!.uid)}",
+            insensitiveFullName: "$firstName $lastName#${getShortUID(cred.user!.uid)}".toLowerCase(),
             email: email,
             bio: '',
             friends: [],
             photoUrl: photoUrl,
+            blocked: [],
         );
 
         _firestore.collection('users').doc(cred.user!.uid).set(usr.toJson());
