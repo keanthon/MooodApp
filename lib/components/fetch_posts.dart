@@ -59,7 +59,7 @@ class _FetchPostsState extends State<FetchPosts> {
                   List<Uint8List> recorderInput = (jsonDecode(_snapData["recorderInput"]) as List).map((e) {
                     return Uint8List.fromList(e.cast<int>());
                   }).toList();
-                  return PostCard(snap: _snapData, recorderInput: recorderInput, postID: _snapshot.data[index].id,);
+                  return PostCard(snap: _snapData, recorderInput: recorderInput, postID: _snapshot.data[index].id, ownPost: _snapData["uid"]==widget.uid,);
                 } else if (posts.hasMore) {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 32.0),

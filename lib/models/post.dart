@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostData {
-  final DateTime date;
+  final Timestamp date;
   final String uid;
   final String status;
   final String emoji;

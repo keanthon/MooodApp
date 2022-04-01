@@ -1,37 +1,37 @@
 {
   "project_info": {
-    "project_number": "24369310753",
-    "project_id": "moood-97f03",
-    "storage_bucket": "moood-97f03.appspot.com"
+    "project_number": "991880214170",
+    "project_id": "moood-e4c9e",
+    "storage_bucket": "moood-e4c9e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:24369310753:android:96b14ab68851191aef8760",
+        "mobilesdk_app_id": "1:991880214170:android:a4cd95c525d7381c61d123",
         "android_client_info": {
           "package_name": "com.example.moood"
         }
       },
       "oauth_client": [
         {
-          "client_id": "24369310753-5o5n74afaf3h1go5pek0jkrmu7lkavin.apps.googleusercontent.com",
+          "client_id": "991880214170-v155ibvhiv2s2nb4eqnopt25lg00glkm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB4yUvmvIn3qyXuoKcq-O26aAP197t8DsM"
+          "current_key": "AIzaSyANsQoTe0_M27Ev6qHNRL0FcgeD5NGAHn4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "24369310753-5o5n74afaf3h1go5pek0jkrmu7lkavin.apps.googleusercontent.com",
+              "client_id": "991880214170-v155ibvhiv2s2nb4eqnopt25lg00glkm.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "24369310753-9u7d9blgh93cttlu9p10m0q12viicgqs.apps.googleusercontent.com",
+              "client_id": "991880214170-qeuvl4tt2hhf67f8khkp7issgqdc0d9k.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.moood"

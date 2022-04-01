@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>24369310753-9u7d9blgh93cttlu9p10m0q12viicgqs.apps.googleusercontent.com</string>
+	<string>991880214170-qeuvl4tt2hhf67f8khkp7issgqdc0d9k.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.24369310753-9u7d9blgh93cttlu9p10m0q12viicgqs</string>
+	<string>com.googleusercontent.apps.991880214170-qeuvl4tt2hhf67f8khkp7issgqdc0d9k</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAjmDctr14h9Ssj6KHbrF9rwOfTLAwLbNU</string>
+	<string>AIzaSyCcc6MSEjUH3Jd49OwuY3NQadgPcs-yThA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>24369310753</string>
+	<string>991880214170</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.moood</string>
 	<key>PROJECT_ID</key>
-	<string>moood-97f03</string>
+	<string>moood-e4c9e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>moood-97f03.appspot.com</string>
+	<string>moood-e4c9e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:24369310753:ios:dae174f0d6058155ef8760</string>
+	<string>1:991880214170:ios:813aa1c5205ae42a61d123</string>
 </dict>
 </plist>

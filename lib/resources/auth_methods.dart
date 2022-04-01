@@ -108,7 +108,7 @@ class AuthMethods {
     required List<double> location,
     required BuildContext context,
   }) async {
-    var pos = PostData(uid: uid, status: status, emoji: emoji, date: DateTime.now(),
+    var pos = PostData(uid: uid, status: status, emoji: emoji, date: Timestamp.fromDate(DateTime.now()),
                       recorderInput: recorderInput, fullName: fullName, proUrl: proUrl, location: location).toJson();
     String res = "Error";
 
@@ -154,6 +154,7 @@ class AuthMethods {
 
   Future<void> signOut() async {
     _auth.signOut();
+    _firestore.clearPersistence();
   }
 
   Future<Map<String, dynamic>?> lastPost(uid) async {
@@ -187,5 +188,17 @@ class AuthMethods {
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
+  }
+
+  Future<String> reportPost(snap) async {
+    String res = "error";
+    try {
+      await _firestore.collection("reported").doc(snap["uid"]).collection("posts").add(snap);
+      res = "success";
+    }
+    catch(err) {
+      res = err.toString();
+    }
+    return res;
   }
 }

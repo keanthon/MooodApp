@@ -133,3 +133,46 @@ String getDate(DateTime date) {
   }
   return DateFormat.yMMMMd().format(date);
 }
+
+Future<bool> showAlertDialog(BuildContext context, String identifier) async {
+  bool ret = false;
+  String message = "";
+  if(identifier=="post") {
+    message = "report this post";
+  }
+  if(identifier=="user") {
+    message = "block this user";
+  }
+
+  await showDialog<bool>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        content: Text("Are you sure you want to ${message}?"),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              ret = false;
+            },
+          ),
+          TextButton(
+            child: const Text('Confirm'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              ret = true;
+            },
+          ),
+        ],
+      );
+    },
+  );
+
+  return ret;
+
+}
