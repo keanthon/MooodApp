@@ -16,7 +16,13 @@ class FriendRequests extends StatefulWidget {
 
 class FriendRequestsState extends State<FriendRequests> {
   UserClass user;
-  FriendRequestsState({Key? key, required this.user});
+  FriendRequestsState({Key? key, required this.user}) {
+    user.blocked.forEach((element) {
+      blockedSet.add(element["UID"]);
+    });
+  }
+
+  Set<dynamic> blockedSet = {};
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Map<String, String>> friendRequests = [];
@@ -28,8 +34,14 @@ class FriendRequestsState extends State<FriendRequests> {
         .then((value) {
       if (value.exists) {
         if (value.data()!.containsKey("friendRequests")) {
+          List revisedFriendRequests = [];
+          (value.get("friendRequests") as List).forEach((element) {
+            if (!blockedSet.contains(element["UID"])) {
+              revisedFriendRequests.add(element);
+            }
+          });
           setState(() {
-            friendRequests = castIntoListMap(value.get("friendRequests"));
+            friendRequests = castIntoListMap(revisedFriendRequests);
           });
         }
       }
