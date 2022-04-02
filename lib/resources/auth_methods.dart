@@ -108,8 +108,8 @@ class AuthMethods {
     required List<double> location,
     required BuildContext context,
   }) async {
-    var pos = PostData(uid: uid, status: status, emoji: emoji, date: Timestamp.fromDate(DateTime.now()),
-                      recorderInput: recorderInput, fullName: fullName, proUrl: proUrl, location: location).toJson();
+
+
     String res = "Error";
 
     try {
@@ -118,8 +118,16 @@ class AuthMethods {
       batchArray.add(_firestore.batch());
       int operationCount =0, batchIndex = 0;
 
+      var pos = PostData(uid: uid, status: status, emoji: emoji, date: Timestamp.fromDate(DateTime.now()),
+          recorderInput: recorderInput, fullName: fullName, proUrl: proUrl, location: location).toJson();
+
+      // put in allPost collection as a place holder to avoid collision
+      var ref = _firestore.collection("allPost").doc();
+      // Just sending data data so it's faster
+      batchArray[batchIndex].set(ref, {'date':pos['date']});
+
       // put in my posts
-      var ref = _firestore.collection("userfeed").doc(uid).collection("posts").doc();
+      ref = _firestore.collection("userfeed").doc(uid).collection("posts").doc(ref.id);
       batchArray[batchIndex].set(ref, pos);
       
       // put in my feed
@@ -142,12 +150,57 @@ class AuthMethods {
         await b.commit();
       }
       res = "success";
+
+      if(res=="success") {
+        Provider.of<UserProvider>(context, listen: false).setLastPostInfo(pos, ref.id);
+      }
     } catch(err) {
-      res = err.toString();
+
     }
 
-    if(res=="success") {
-      Provider.of<UserProvider>(context, listen: false).setLastPost(pos);
+    return res;
+  }
+
+  // Delete post
+  Future<String> deletePost(String uid, String pid, List friends) async {
+    String res = "Error";
+    try {
+      List<WriteBatch> batchArray = [];
+      batchArray.add(_firestore.batch());
+      int operationCount =0, batchIndex = 0;
+
+      // delete from universal
+      var ref = _firestore.collection("allPost").doc(pid);
+      batchArray[batchIndex].delete(ref);
+
+      // delete from my post and feed
+      ref = _firestore.collection("userfeed").doc(uid).collection("posts").doc(pid);
+      batchArray[batchIndex].delete(ref);
+
+      ref = _firestore.collection("userfeed").doc(uid).collection("feed").doc(pid);
+      batchArray[batchIndex].delete(ref);
+
+      // Delete from my friends feed using batch array
+      for(var friend in friends) {
+        var friendRef = _firestore.collection("userfeed").doc(friend["UID"]).collection("feed").doc(pid);
+        batchArray[batchIndex].delete(friendRef);
+        operationCount++;
+        if(operationCount==490) {
+          batchArray.add(_firestore.batch());
+          batchIndex++;
+          operationCount = 0;
+        }
+      }
+
+      for(var b in batchArray) {
+        await b.commit();
+      }
+
+      res = "success";
+
+    }
+    catch(err) {
+      res = err.toString();
     }
     return res;
   }
@@ -157,7 +210,7 @@ class AuthMethods {
     _firestore.clearPersistence();
   }
 
-  Future<Map<String, dynamic>?> lastPost(uid) async {
+  Future<List<dynamic>> lastPost(uid) async {
     var snapshot =  await
         _firestore
         .collection('userfeed')
@@ -166,7 +219,13 @@ class AuthMethods {
         .orderBy('date', descending: true)
         .limit(1).get();
 
-    return snapshot.docs.length==0 ? null : snapshot.docs[0].data();
+    if(snapshot.docs.length==0) {
+      return [null, null];
+    }
+    else {
+      return [snapshot.docs[0].id, snapshot.docs[0].data()];
+    }
+
   }
 
   // adding image to firebase storage
@@ -201,4 +260,46 @@ class AuthMethods {
     }
     return res;
   }
+
+  void blockFriend(String uid, Map<String, dynamic> friend) {
+    _firestore.collection("users").doc(uid).update({
+      "blocked": FieldValue.arrayUnion([friend]),
+    });
+  }
+
+  void removeFriend(String uid, String proUrl, String fullName, Map<String, dynamic> friend) {
+    // remove from each other's friend lists
+    _firestore.collection("users").doc(uid).update({
+      "friends": FieldValue.arrayRemove([friend]),
+    });
+
+    _firestore.collection("users").doc(friend["UID"]).update({
+      "friends": FieldValue.arrayRemove([{
+        "UID": uid,
+        "fullName": fullName,
+        "proUrl": proUrl,
+      }]),
+    });
+
+    // remove content from each other's feeds
+    _firestore.collection("userfeed").doc(uid).collection("feed")
+        .where("fullName", isEqualTo: friend["fullName"])
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element.reference.delete();
+      });
+    });
+
+    _firestore.collection("userfeed").doc(friend["UID"]).collection("feed")
+        .where("fullName", isEqualTo: fullName)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element.reference.delete();
+      });
+    });
+  }
+
+
 }

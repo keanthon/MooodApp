@@ -25,10 +25,11 @@ class _MobileLayoutState extends State<MobileLayout> {
   DateTime priorTime = DateTime(0);
   List<Widget> _screens = [
     StreamInterface(),
-
     myFriends(),
     Profile(),
   ];
+
+
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _MobileLayoutState extends State<MobileLayout> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     // UserClass? user = Provider.of<UserProvider>(context).getUser;
@@ -49,7 +51,7 @@ class _MobileLayoutState extends State<MobileLayout> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          goToPage(NewPost(), 2, context);
+          goToPage(NewPost(onFinished: (res)=>showSnackBar(res, context),), 2, context);
         },
         backgroundColor: michiganBlue,
       ),

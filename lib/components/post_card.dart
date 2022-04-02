@@ -1,12 +1,13 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
 import 'package:sound_stream/sound_stream.dart';
 
+import '../models/user_class.dart';
+import '../providers/user_provider.dart';
 import '../screens/comments.dart';
 import '../utils/colors_styles.dart';
 
@@ -32,7 +33,7 @@ class _PostCardState extends State<PostCard> {
   final PlayerStream _player = PlayerStream();
   bool currentlyPlaying = false;
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  AuthMethods _dbMethods = AuthMethods();
 
   List<dynamic> posts = [];
 
@@ -66,6 +67,8 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    UserClass user = Provider.of<UserProvider>(context).getUser!;
+
     return Card(
       color: postCardColor,
       shape: OutlineInputBorder(
@@ -113,9 +116,9 @@ class _PostCardState extends State<PostCard> {
 
                 onChanged: (String? newValue) async {
                   if(newValue=="Report...") {
-                    bool res = await showAlertDialog(context, "post");
+                    bool res = await showAreYouSureDialog(context, "post");
                     if(res) {
-                      String suc = await AuthMethods().reportPost(widget.snap);
+                      String suc = await _dbMethods.reportPost(widget.snap);
                       if(suc=="success") {
                         showSnackBar(
                             "This post has been reported. It will be reviewed by our administrators within 24 hours and appropriate actions will be taken",
@@ -123,6 +126,33 @@ class _PostCardState extends State<PostCard> {
                       }
                       else {
                         showSnackBar("Network failed. Please check your connection.", context);
+                      }
+                    }
+                  }
+
+                  if(newValue=="Block user") {
+                    bool res = await showAreYouSureDialog(context, "blockUser");
+                    if(res) {
+                      Map<String, dynamic> friend = {
+                        'UID': widget.snap["uid"],
+                        'fullName': widget.snap["fullName"],
+                        'proUrl': widget.snap["proUrl"],
+                      };
+                      _dbMethods.removeFriend(user.uid, user.photoUrl, user.fullName, friend);
+                      _dbMethods.blockFriend(user.uid, friend);
+                      showSnackBar("${widget.snap["fullName"]} is blocked. Please refresh your feed.", context);
+                    }
+                  }
+
+                  if(newValue=="Delete") {
+                    bool res = await showAreYouSureDialog(context, "delete");
+                    if(res) {
+                      Provider.of<UserProvider>(context, listen: false).refreshUser();
+                      UserClass? user = Provider.of<UserProvider>(context, listen: false).getUser!;
+                      String suc = await _dbMethods.deletePost(user.uid, widget.postID, user.friends);
+                      print(suc);
+                      if(widget.postID==Provider.of<UserProvider>(context, listen: false).getLastPID) {
+                        Provider.of<UserProvider>(context, listen: false).refreshLastPost();
                       }
                     }
                   }

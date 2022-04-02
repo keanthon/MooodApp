@@ -78,7 +78,7 @@ class Profile extends StatelessWidget {
 
 
                       Provider.of<UserProvider>(context).getLastPost!=null ?
-                      PostCard(snap: Provider.of<UserProvider>(context).getLastPost, ownPost: true,) :
+                      PostCard(snap: Provider.of<UserProvider>(context, listen: false).getLastPost, postID: Provider.of<UserProvider>(context, listen: false).getLastPID,ownPost: true,) :
                       SizedBox(height: 15,),
 
 

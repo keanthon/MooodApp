@@ -14,7 +14,8 @@ import 'package:sound_stream/sound_stream.dart';
 import 'package:moood/utils/helper_functions.dart';
 
 class NewPost extends StatefulWidget {
-  const NewPost({Key? key}) : super(key: key);
+  final Function(String) onFinished;
+  const NewPost({Key? key, required this.onFinished}) : super(key: key);
 
   @override
   State<NewPost> createState() => _NewPostState();
@@ -265,6 +266,13 @@ class _NewPostState extends State<NewPost> {
                               ] : [],
                               context: context,
                             );
+
+                            if(res=="success") {
+                              widget.onFinished("Hooray! Moood sent successfully");
+                            }
+                            else {
+                              widget.onFinished("Oh no! Moood failed to send :(");
+                            }
                           }
 
 

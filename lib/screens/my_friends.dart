@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/utils/helper_functions.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ class myFriendsState extends State<myFriends> {
   myFriendsState({Key? key});
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthMethods _dbMethods = AuthMethods();
 
   List<dynamic> friends = [];
 
@@ -37,45 +39,6 @@ class myFriendsState extends State<myFriends> {
     });
   }
 
-  void blockFriend(String uid, dynamic friend) {
-    _firestore.collection("users").doc(uid).update({
-      "blocked": FieldValue.arrayUnion([friend]),
-    });
-  }
-
-  void removeFriend(String uid, String proUrl, String fullName, dynamic friend) {
-    // remove from each other's friend lists
-    _firestore.collection("users").doc(uid).update({
-      "friends": FieldValue.arrayRemove([friend]),
-    });
-
-    _firestore.collection("users").doc(friend["UID"]).update({
-      "friends": FieldValue.arrayRemove([{
-        "UID": uid,
-        "fullName": fullName,
-        "proUrl": proUrl,
-      }]),
-    });
-
-    // remove content from each other's feeds
-    _firestore.collection("userfeed").doc(uid).collection("feed")
-      .where("fullName", isEqualTo: friend["fullName"])
-      .get()
-      .then((value) {
-        value.docs.forEach((element) {
-          element.reference.delete();
-        });
-    });
-
-    _firestore.collection("userfeed").doc(friend["UID"]).collection("feed")
-      .where("fullName", isEqualTo: fullName)
-      .get()
-      .then((value) {
-        value.docs.forEach((element) {
-          element.reference.delete();
-        });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,24 +120,34 @@ class myFriendsState extends State<myFriends> {
                           children: [
                             IconButton(
                               padding: EdgeInsets.zero,
-                              onPressed: () {
-                                removeFriend(user.uid, user.photoUrl, user.fullName, friend);
-                                setState(() {
-                                  friends.remove(friend);
-                                });
+                              onPressed: () async {
+                                bool res = await showAreYouSureDialog(context, "removeFriend");
+                                if(res) {
+                                  _dbMethods.removeFriend(
+                                      user.uid, user.photoUrl, user.fullName,
+                                      friend);
+                                  setState(() {
+                                    friends.remove(friend);
+                                  });
+                                }
                               },
                               icon: Icon(Icons.remove),
                             ),
                             IconButton(
                               padding: EdgeInsets.zero,
-                              onPressed: () {
-                                removeFriend(user.uid, user.photoUrl, user.fullName, friend);
-                                blockFriend(user.uid, friend);
-                                user.blocked.add(friend);
+                              onPressed: () async {
+                                bool res = await showAreYouSureDialog(context, "blockUser");
+                                if(res) {
+                                  _dbMethods.removeFriend(
+                                      user.uid, user.photoUrl, user.fullName,
+                                      friend);
+                                  _dbMethods.blockFriend(user.uid, friend);
+                                  user.blocked.add(friend);
 
-                                setState(() {
-                                  friends.remove(friend);
-                                });
+                                  setState(() {
+                                    friends.remove(friend);
+                                  });
+                                }
                               },
                               icon: Icon(Icons.block),
                             ),

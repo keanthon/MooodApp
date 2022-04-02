@@ -134,14 +134,21 @@ String getDate(DateTime date) {
   return DateFormat.yMMMMd().format(date);
 }
 
-Future<bool> showAlertDialog(BuildContext context, String identifier) async {
+Future<bool> showAreYouSureDialog(BuildContext context, String identifier) async {
   bool ret = false;
   String message = "";
   if(identifier=="post") {
-    message = "report this post";
+    message = "report this post?";
   }
-  if(identifier=="user") {
-    message = "block this user";
+  if(identifier=="delete") {
+    message = "delete this post?";
+  }
+  if(identifier=="blockUser") {
+    message = "block this user? You will no longer see their Mooods, and you will not be able to find each other in search.";
+  }
+
+  if(identifier=="removeFriend") {
+    message = "remove this friend? You will no longer see their Mooods.";
   }
 
   await showDialog<bool>(
@@ -152,7 +159,7 @@ Future<bool> showAlertDialog(BuildContext context, String identifier) async {
 
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(32.0))),
-        content: Text("Are you sure you want to ${message}?"),
+        content: Text("Are you sure you want to ${message}"),
         actions: <Widget>[
           TextButton(
             child: const Text('Cancel'),
@@ -174,5 +181,4 @@ Future<bool> showAlertDialog(BuildContext context, String identifier) async {
   );
 
   return ret;
-
 }
