@@ -9,6 +9,7 @@ import 'package:sound_stream/sound_stream.dart';
 import '../models/user_class.dart';
 import '../providers/user_provider.dart';
 import '../screens/comments.dart';
+import '../screens/my_posts.dart';
 import '../utils/colors_styles.dart';
 
 class PostCard extends StatefulWidget {
@@ -82,9 +83,15 @@ class _PostCardState extends State<PostCard> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
             child: Row(children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(widget.snap["proUrl"]),
-                radius: 25,
+              InkWell(
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(widget.snap["proUrl"]),
+                  radius: 25,
+                ),
+                onTap: () {
+                  if(!widget.ownPost)
+                    goToPage( MyPosts(uid:widget.snap["uid"]), 2, context);
+                  },
               ),
               SizedBox(
                 width: 10,

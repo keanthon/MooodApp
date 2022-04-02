@@ -123,7 +123,7 @@ class _ProfileState extends State<Profile> {
 
 
                       IconButton(
-                          onPressed: () { goToPage( MyPosts(), 2, context);},
+                          onPressed: () { goToPage( MyPosts(uid:user.uid), 2, context);},
                           icon: Icon(Icons.arrow_forward),
                       ),
                     ],

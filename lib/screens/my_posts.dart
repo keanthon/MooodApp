@@ -7,8 +7,10 @@ import '../providers/user_provider.dart';
 import '../utils/colors_styles.dart';
 
 class MyPosts extends StatefulWidget {
+  final String uid;
   const MyPosts({
     Key? key,
+    required this.uid,
   }) : super(key: key);
 
   @override
@@ -23,8 +25,7 @@ class _MyPostsState extends State<MyPosts> {
 
   @override
   Widget build(BuildContext context) {
-    UserClass? user = Provider.of<UserProvider>(context).getUser;
-    return (user==null) ? Center(child: CircularProgressIndicator()) : Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Row(
@@ -41,7 +42,7 @@ class _MyPostsState extends State<MyPosts> {
         ),
       ),
       body: FetchPosts(
-        uid: user.uid,
+        uid: widget.uid,
         feedOrPost: "posts",
       ),
     );
