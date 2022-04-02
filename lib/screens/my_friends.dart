@@ -70,19 +70,19 @@ class myFriendsState extends State<myFriends> {
           child: ListView (
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      goToPage(Blocked(), 2, context);
-                    },
-                    child: Text(
-                      "Blocked list",
-                    ),
-                  ),
-                ]
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     ElevatedButton(
+              //       onPressed: () {
+              //         goToPage(Blocked(), 2, context);
+              //       },
+              //       child: Text(
+              //         "Blocked list",
+              //       ),
+              //     ),
+              //   ]
+              // ),
               for (var friend in friends)
                 Card(
                   color: postCardColor,
