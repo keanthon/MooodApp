@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:moood/resources/auth_methods.dart';
 import 'package:moood/responsive/responsive_layout.dart';
 import 'package:moood/utils/input_decoration.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/colors_styles.dart';
 import '../utils/helper_functions.dart';
@@ -29,6 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   Uint8List? _image;
+  bool _readTerms = false;
 
   @override
   void initState() {
@@ -207,7 +209,45 @@ class _SignupScreenState extends State<SignupScreen> {
                         Colors.redAccent[100]).decorate(),
                   ),
                   const SizedBox(height: 10,),
+                  Row(
+                      children: [
+                        SizedBox(width: 30,),
+                        Checkbox(
+                            value: _readTerms,
+                            onChanged: (val) {
+                            setState(() {
+                              _readTerms = val!;
+                            });
+                        },
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "I have read and agree to the ",
+                              ),
+                              InkWell(
+                                child: Text("End-User License Agreement",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      decoration: TextDecoration.underline
+                                  ),
+                                ),
+                                onTap: () async {
+                                  const url = 'https://keanthon.github.io/EndUserLicenseAgreement/';
+                                  if(await canLaunch(url)){
+                                    await launch(url);
+                                  }else {
+                                    throw 'Could not launch $url';
+                                  }
+                                },
+                              ),
 
+                            ]
+                        ),
+                      ],
+
+                      ),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: michiganBlue,
@@ -217,7 +257,12 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       onPressed: () async {
-                        signUpUser(context);
+                        if(_readTerms) {
+                          signUpUser(context);
+                        }
+                        else {
+                          showSnackBar('Please read and accept the End-User License Agreement.', context);
+                        }
 
                       },
                       child: _isLoading? const Center(

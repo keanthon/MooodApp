@@ -103,7 +103,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
               ),
               onPressed: () async {
-                // FIXME cache login status so don't have to re-login
+                
                 if (_formKey.currentState!.validate()) {
                   loginUser(context);
 
