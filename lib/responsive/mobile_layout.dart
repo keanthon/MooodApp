@@ -101,7 +101,7 @@ class _MobileLayoutState extends State<MobileLayout> {
             });
           }
 
-          // refresh map every 15 minutes
+          // refresh map every 5 minutes
           if(index==2) {
             if(DateTime.now().difference(priorTime).inMinutes>5) {
               priorTime = DateTime.now();
