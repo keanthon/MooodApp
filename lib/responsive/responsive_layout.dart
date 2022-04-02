@@ -38,7 +38,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
       //   // 600 can be changed to 900 if you want to display tablet screen with mobile screen layout
       //   return const WebLayout();
       // }
-      return MobileLayout(uid: user!.uid,);
+      return MobileLayout(uid: user.uid,);
     });
   }
 }

@@ -66,7 +66,7 @@ class _SignupScreenState extends State<SignupScreen> {
       });
 
       if(res=='success') {
-        goToPage(ResponsiveLayout(), 1, context);
+        goToPage(ResponsiveLayout(), 3, context);
       }
       else {
         showSnackBar(res, context);
@@ -234,12 +234,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                 ),
                                 onTap: () async {
-                                  const url = 'https://keanthon.github.io/EndUserLicenseAgreement/';
-                                  if(await canLaunch(url)){
-                                    await launch(url);
-                                  }else {
-                                    throw 'Could not launch $url';
-                                  }
+                                  launchEULA();
                                 },
                               ),
 

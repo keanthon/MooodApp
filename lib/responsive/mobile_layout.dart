@@ -8,6 +8,7 @@ import 'package:moood/screens/profile.dart';
 import 'package:moood/utils/helper_functions.dart';
 
 import '../screens/new_post_screen.dart';
+import '../screens/setting_screen.dart';
 import '../screens/stream_interface.dart';
 
 class MobileLayout extends StatefulWidget {
@@ -27,6 +28,7 @@ class _MobileLayoutState extends State<MobileLayout> {
     StreamInterface(),
     myFriends(),
     Profile(),
+    Setting(),
   ];
 
 
@@ -73,8 +75,9 @@ class _MobileLayoutState extends State<MobileLayout> {
         items: <Widget>[
           Icon(Icons.feed, size: 30),
           Icon(Icons.people, size: 30),
-          Icon(Icons.map),
+          Icon(Icons.map, size: 30),
           Icon(Icons.account_circle, size: 30),
+          Icon(Icons.settings, size: 30,),
         ],
         onTap: (index) {
           //Handle button tap
@@ -100,7 +103,7 @@ class _MobileLayoutState extends State<MobileLayout> {
 
           // refresh map every 15 minutes
           if(index==2) {
-            if(DateTime.now().difference(priorTime).inMinutes>15) {
+            if(DateTime.now().difference(priorTime).inMinutes>5) {
               priorTime = DateTime.now();
               setState(() {
                 keyCount = keyCount + 1;

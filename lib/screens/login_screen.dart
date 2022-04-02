@@ -103,7 +103,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
               ),
               onPressed: () async {
-                
+
                 if (_formKey.currentState!.validate()) {
                   loginUser(context);
 
@@ -118,15 +118,21 @@ class MyCustomFormState extends State<MyCustomForm> {
                   : const Text('Submit')
           ),
 
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                child: const Text(
-                  'Don\'t have an account?',
-                  style: TextStyle(color: Colors.grey),
+              InkWell(
+                child: Container(
+                  child: const Text(
+                    'Forget password?',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                onTap: () async {
+                  String email = await enterEmail(context);
+                  AuthMethods().resetPassword(email);
+                },
               ),
               GestureDetector(
                 onTap: () => Navigator.push(
@@ -137,7 +143,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ) ,
                 child: Container(
                   child: const Text(
-                    ' Signup.',
+                    'Don\'t have an account? Signup.',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey

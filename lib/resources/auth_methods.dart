@@ -301,5 +301,21 @@ class AuthMethods {
     });
   }
 
+  Future<void> deleteAccount(List friends) async {
+    // get all his post
+    String uid = _auth.currentUser!.uid;
+    var snapshots = await _firestore.collection("userfeed").doc(uid).collection("posts").get();
 
+    // delete from all friends
+    for (var doc in snapshots.docs) {
+      deletePost(uid, doc.id, friends);
+      // remove from all posts
+      _firestore.collection("allPost").doc(doc.id).delete();
+    }
+    _auth.currentUser!.delete();
+  }
+
+  Future<void> resetPassword(String email) async {
+    _auth.sendPasswordResetEmail(email: email);
+  }
 }

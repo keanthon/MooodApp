@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moood/utils/globals.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'colors_styles.dart';
 
 // 1 for push replace, 2 for push, 3 for pushandremoveuntil
@@ -151,6 +152,10 @@ Future<bool> showAreYouSureDialog(BuildContext context, String identifier) async
     message = "remove this friend? You will no longer see their Mooods.";
   }
 
+  if(identifier=="deleteAcc") {
+    message = "delete your account? You will lose all the mooods that you posted and your friends will miss you 🥺";
+  }
+
   await showDialog<bool>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -181,4 +186,97 @@ Future<bool> showAreYouSureDialog(BuildContext context, String identifier) async
   );
 
   return ret;
+}
+
+Future<bool> confirmDialog(BuildContext context) async {
+  TextEditingController _textFieldController = TextEditingController();
+  bool ret = false;
+  await showDialog<bool>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Account Deletion'),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        content: TextField(
+          onChanged: (value) { },
+          controller: _textFieldController,
+          decoration: InputDecoration(hintText: "Please type 'CONFIRM' in all CAPS", hintStyle: TextStyle(fontSize: 14)),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              ret = false;
+            },
+          ),
+          TextButton(
+            child: const Text('Confirm'),
+            onPressed: () {
+              if(_textFieldController.text=='CONFIRM') {
+                ret = true;
+              }
+              else {
+                ret = false;
+                showSnackBar("Input does not match 'CONFIRM'", context);
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+
+  return ret;
+}
+
+Future<String> enterEmail(BuildContext context) async {
+  String ret = "";
+  TextEditingController _textFieldController = TextEditingController();
+  await showDialog<bool>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Reset Password'),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        content: TextField(
+          onChanged: (value) { },
+          controller: _textFieldController,
+          decoration: InputDecoration(hintText: "Please enter your email.", hintStyle: TextStyle(fontSize: 14)),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              ret = "";
+            },
+          ),
+          TextButton(
+            child: const Text('Confirm'),
+            onPressed: () {
+              ret = _textFieldController.text;
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  return ret;
+}
+
+
+void launchEULA() async {
+  const url = 'https://keanthon.github.io/EndUserLicenseAgreement/';
+  if(await canLaunch(url)){
+  await launch(url);
+  }else {
+  throw 'Could not launch $url';
+  }
 }
